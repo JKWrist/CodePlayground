@@ -36,3 +36,6 @@
 
 #DS_Store
 *.DS_Store
+
+#ssh
+id_rsa*
