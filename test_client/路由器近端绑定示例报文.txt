@@ -1,0 +1,110 @@
+2020-12-03 12:48:20.889964+0800 unichomSDK[9825:628009] -[HWRouterBindingViewController logintest]_block_invoke [Line 231]
+
+-----------Log-------------
+user_login_nonce-1{
+    "csrf_param" = 3beee665dfbc2eb0ff28f6db6c1a2724;
+    "csrf_token" = f60a22d41a347cf338943bee61519429;
+    err = 1;
+}
+2020-12-03 12:48:20.890134+0800 unichomSDK[9825:628009] -[HWRouterBindingViewController logintest]_block_invoke [Line 241]
+
+-----------Log-------------
+_csrf_param: 3beee665dfbc2eb0ff28f6db6c1a2724 , _csrf_token :f60a22d41a347cf338943bee61519429
+2020-12-03 12:48:20.937934+0800 unichomSDK[9825:628009] -[HWRouterBindingViewController logintest]_block_invoke_2 [Line 243]
+
+-----------Log-------------
+user_login_nonce-2{
+    "csrf_param" = fbf60f345feeda980d945a7080bb0ed6;
+    "csrf_token" = 7f9876ab2a770e5b6237cf29a0713e86;
+    err = 0;
+    iterations = 1000;
+    salt = 338af4833128cbd0dabc3885a506be396ef42fb76a8beb60927977c127845817;
+    servernonce = a5ca2b47a55257b73d46d73bed5db1e3Tk5MD498Lry0ArbLyKKj990OCHMbjy0e;
+}
+2020-12-03 12:48:20.939826+0800 unichomSDK[9825:628009] -[HWRouterBindingViewController logintest]_block_invoke_2 [Line 246]
+
+-----------Log-------------
+saltPassword : a97dd593388b380f6210dc6ff219ad104a0687e393aeea299a5363ca0cabafda
+2020-12-03 12:48:20.940028+0800 unichomSDK[9825:628009] -[HWRouterBindingViewController logintest]_block_invoke_2 [Line 248]
+
+-----------Log-------------
+clientKey : 0a1b33ccc1d8c918c1ee2422745f15a2fb2aef183efee5b714394037ddc82048
+2020-12-03 12:48:20.940135+0800 unichomSDK[9825:628009] -[HWRouterBindingViewController logintest]_block_invoke_2 [Line 250]
+
+-----------Log-------------
+stroedKey : e6b06e416304cfdc36297c33ba1d66e49670c4bdfd5763e1870bb454f95f5258
+2020-12-03 12:48:20.940235+0800 unichomSDK[9825:628009] -[HWRouterBindingViewController logintest]_block_invoke_2 [Line 252]
+
+-----------Log-------------
+serverKey : 50688ef4a98ae0c3b70bf7327222ef280ed3e54fafe396e54b75998ac04403c8
+2020-12-03 12:48:20.940398+0800 unichomSDK[9825:628009] -[HWRouterBindingViewController logintest]_block_invoke_2 [Line 254]
+
+-----------Log-------------
+finalNonce : a5ca2b47a55257b73d46d73bed5db1e3Tk5MD498Lry0ArbLyKKj990OCHMbjy0e
+2020-12-03 12:48:20.940550+0800 unichomSDK[9825:628009] -[HWRouterBindingViewController logintest]_block_invoke_2 [Line 257]
+
+-----------Log-------------
+clientSignature : 120a5675fbc9f317d599357b251e397312f5bd6cc469e97170fd3ae47bbfbeef
+   
+2020-12-03 12:48:20.941928+0800 unichomSDK[9825:628009] -[HWRouterBindingViewController logintest]_block_invoke_2 [Line 271]
+
+-----------Log-------------
+str ：181165b93a113a0f1477115951412cd1e9df5274fa970cc664c47ad3a6779ea7
+2020-12-03 12:48:20.942488+0800 unichomSDK[9825:628009] -[HWRouterBindingViewController logintest]_block_invoke_2 [Line 278]
+
+-----------Log-------------
+paraDic:{
+    csrf =     {
+        "csrf_param" = fbf60f345feeda980d945a7080bb0ed6;
+        "csrf_token" = 7f9876ab2a770e5b6237cf29a0713e86;
+    };
+    data =     {
+        clientproof = 181165b93a113a0f1477115951412cd1e9df5274fa970cc664c47ad3a6779ea7;
+        finalnonce = a5ca2b47a55257b73d46d73bed5db1e3Tk5MD498Lry0ArbLyKKj990OCHMbjy0e;
+    };
+}
+2020-12-03 12:48:21.009817+0800 unichomSDK[9825:628009] -[HWRouterBindingViewController logintest]_block_invoke_3 [Line 280]
+
+-----------Log-------------
+manager user_login_proof{
+    "csrf_param" = 99850e37c58368608e8a1d34c60489fb;
+    "csrf_token" = 553c585612c37b858db859a8b2edd598;
+    err = 0;
+    level = 1;
+    rsae = 010001;
+    rsan = F706ED29A7A2FF0E2FC36DA5838F2F239F3DC9E3FBD6B28BB35FE8F39690CF13DE313CD0A59CF9A37EFAE58BF980CEDC9C3A91151CCA7FB36F4D257B027562BD1269B6A94982E383F093FCCF4BEF2092EAF5DFFDD64DB12B6E0AF2F9355E64CC11170E1D3DC99062EFF0EC58C3E2BD482380E556289B1418038B079B348E4D3CA3B00AE60A00A7126DA82A26DE5893C3467DED365352E87F9131A48F4CE0DDB1BECB2FF9511D21A10C0676A202917066DC80280138B424157FC9CEAC720B4350F7ED2089774C961666398798D95974AE6DB36D27DAE187CAD604DC789288DF949BA78E6B9AF54860779C075B604E99A6146962ECC22E1630FA74F7EA98AEAB93;
+    rsapubkeysignature = c335fe98fc55b4d0bbf382dae2ed1dee75e2b5531a7368c264ee46d2cf6dcb85;
+    serversignature = 9db80a40213d49f53dbcc504a29167022faebfd65eed7d7bf7c42c9ef84003b3;
+}
+
+2020-12-03 12:48:21.081865+0800 unichomSDK[9825:628009] -[HWRouterBindingViewController getDeviceid:] [Line 355]
+
+-----------Log-------------
+{
+    P = "OjT1VDSz1xLUC73raMiLeCF5Oi1kxjJXxJeqJWhqRWh4s0z4aCyV5h0yBNTAcgST/aqERlWEoXDHbHK3Dhq5X9dD2sFW8MeXLxCuHFAdXGBQrIn9fk1NC7RRTnkVuZJxm/lf5Aql5kNE/kYEf1qKMdrU2I8p42HEaGGXUfZnnqIkuYHQuSkMyJXday7TWmS2CTeGVm04SlCcJf9pse/3djAiNkt4gG718MOG8axEJUOFxp6xiV7GXK8TAyYms9ObOXWEWxboffCt/W0kcGF3IVnssvxfNI8CxXrjfatgfOpAz306Vo3q4/7CHlKndDGLFxRGIJcEnXLQ3hgXaaFd17ClJ9YIuz8BMkQ1+lq5m4TObBeMfqNzMAA9NxGMvyWIvAW5WB/p1bbUzQTbjIgBFkVRPcMwWtllUF1bdvB2iT/UJDjDQTBwejtRVEK7F73fP8Dh1suRHbq/Zf8uiz/egVkAh+VvrXkzF+c//Qk6Fsf9TjOQXNqvbtLzY7rZSeOx0FYRiB5rK2pBfmcrqh376MY1WyXSF/e5/QZLDKgqeS4RZVMRffW5oQHlb77ZSjDnUxYTlHVa8KGJ2D2O10xsI5E3oqSQY08CaIgAvwxBFRgL/Ro+1kHeQV9MhgLcLh70EtDKk/x4o5uc2LaMOa9eHT1A9RtMxGTSQ9Sbp4p2i1nka9DYYcwKkpTg8J6AX3KvuGjXg1rj2ljr5Ztqy0GCUcEIQm1bNIPV3jkrhpNLRbYCkkHSlQnI6C8/o0W5m3ChjUQiDjOKkuV8EHqwt9HvhCpa5Wvmm/gAyMUMalIU+/EjwdVAerNCDJNgv7q7qjh+Pe6yt8uZsYwi47Bubfk5vA==";
+}
+2020-12-03 12:48:21.083489+0800 unichomSDK[9825:628009] -[HWRouterBindingViewController logintest]_block_invoke_4 [Line 299]
+
+-----------Log-------------
+api/ntwk/lan_host = {
+    DevName = "luyou.360.cn";
+    DomainName = router;
+    FirstEnable = 1;
+    FirstMac = "255.255.255.0";
+    FristIP = "192.168.1.3";
+    ID = "2C:61:04:49:A9:B7";
+    MACAddress = "2C:61:04:49:A9:B7";
+    ShowLanDomainEnable = 0;
+    errcode = 0;
+}
+2020-12-03 12:48:21.169293+0800 unichomSDK[9825:628009] -[HWRouterBindingViewController getDeviceid:]_block_invoke [Line 357]
+
+-----------Log-------------
+getRegisterCode= {
+    code = 0002;
+    data = "<null>";
+    message = "\U8be5\U8def\U7531\U5668\U5df2\U88ab\U7ed1\U5b9a!";
+    resolve = "<null>";
+}---{
+    P = "OjT1VDSz1xLUC73raMiLeCF5Oi1kxjJXxJeqJWhqRWh4s0z4aCyV5h0yBNTAcgST/aqERlWEoXDHbHK3Dhq5X9dD2sFW8MeXLxCuHFAdXGBQrIn9fk1NC7RRTnkVuZJxm/lf5Aql5kNE/kYEf1qKMdrU2I8p42HEaGGXUfZnnqIkuYHQuSkMyJXday7TWmS2CTeGVm04SlCcJf9pse/3djAiNkt4gG718MOG8axEJUOFxp6xiV7GXK8TAyYms9ObOXWEWxboffCt/W0kcGF3IVnssvxfNI8CxXrjfatgfOpAz306Vo3q4/7CHlKndDGLFxRGIJcEnXLQ3hgXaaFd17ClJ9YIuz8BMkQ1+lq5m4TObBeMfqNzMAA9NxGMvyWIvAW5WB/p1bbUzQTbjIgBFkVRPcMwWtllUF1bdvB2iT/UJDjDQTBwejtRVEK7F73fP8Dh1suRHbq/Zf8uiz/egVkAh+VvrXkzF+c//Qk6Fsf9TjOQXNqvbtLzY7rZSeOx0FYRiB5rK2pBfmcrqh376MY1WyXSF/e5/QZLDKgqeS4RZVMRffW5oQHlb77ZSjDnUxYTlHVa8KGJ2D2O10xsI5E3oqSQY08CaIgAvwxBFRgL/Ro+1kHeQV9MhgLcLh70EtDKk/x4o5uc2LaMOa9eHT1A9RtMxGTSQ9Sbp4p2i1nka9DYYcwKkpTg8J6AX3KvuGjXg1rj2ljr5Ztqy0GCUcEIQm1bNIPV3jkrhpNLRbYCkkHSlQnI6C8/o0W5m3ChjUQiDjOKkuV8EHqwt9HvhCpa5Wvmm/gAyMUMalIU+/EjwdVAerNCDJNgv7q7qjh+Pe6yt8uZsYwi47Bubfk5vA==";
+}

@@ -1,0 +1,3 @@
+/Users/junzexu/Downloads/test_client/CMakeFiles/rebuild_cache.dir
+/Users/junzexu/Downloads/test_client/CMakeFiles/edit_cache.dir
+/Users/junzexu/Downloads/test_client/CMakeFiles/scram_test.dir
