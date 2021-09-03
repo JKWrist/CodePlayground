@@ -1,0 +1,1 @@
+#define math 1
