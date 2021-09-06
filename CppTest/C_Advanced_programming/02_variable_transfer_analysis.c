@@ -10,8 +10,6 @@ char * func()
     return p;
 }
 
-//
-
 
 //
 
