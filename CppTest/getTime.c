@@ -7,6 +7,7 @@ void test01()
     time_t tmpTime;
 
     tmpTime = time(NULL);
+    tmpTime -= 3600;
     ptr = gmtime(&tmpTime);
 
     printf("year-mon-mday %d-%d-%d\n", ptr->tm_year + 1900, ptr->tm_mon + 1, ptr->tm_mday);
@@ -38,11 +39,28 @@ void test02()
     printf("day %d \nhour %d \nmin %d \nsec %d \n", iDay, iHour, iMin, iSec);
 }
 
+void test03()
+{
+    char ts[1024] = {0};
+    time_t nowtime;
+    struct tm *tm_nowtime = NULL;
+
+    nowtime = time(NULL);
+    tm_nowtime = localtime(&nowtime);
+    //strftime(ts, 1024, "%Y%m%dT%H%M%SZ", tm_nowtime);
+
+    strftime(ts, 1024, "%F %T", tm_nowtime);
+
+    printf("%s\n", ts);
+}
+
 int main(void)
 {
     //test01();
 
-    test02();
+    //test02();
+
+    test03();
 
     return 0;
 }
