@@ -173,14 +173,14 @@ int main()
     test01();
 
 
-    //在分配更多学生时候发生崩溃的问题，暂未发现问题原因
+    
     test02();
     //指针数组没有分配足够的大小导致出错，访问不改访问的内存越界引发的错误
 
     // a.out(78937,0x108165e00) malloc: *** error for object 0x5000000000000000: pointer being freed was not allocated
     // a.out(78937, 0x108165e00) malloc : ***set a breakpoint in malloc_error_break to debug
-    //                                        Abort trap : 6 
-
+    //                                        Abort trap : 6
+    //在分配更多学生时候发生崩溃的问题，问题已经解决
 
     return 0;
 }
