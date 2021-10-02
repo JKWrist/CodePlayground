@@ -1,0 +1,22 @@
+#角色ID  注释
+Id:123
+
+#角色姓名
+Name:雷神
+
+#攻击力
+Atk:9999
+
+#防御力
+Def:333
+
+#简介
+Info:稻妻地区老大
+
+
+struct ConfigInfo
+{
+   char key[64];
+   char value[64];
+}
+//根据key值能够访问到对应的value
