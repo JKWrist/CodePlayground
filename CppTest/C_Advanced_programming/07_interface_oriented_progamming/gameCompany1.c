@@ -22,7 +22,6 @@ void INIT_GAME_COMPANY1(void **player, char *name)
     strcpy(player1->name, name);
     player1->level = 0;
     player1->exp = 0;
-    printf("name:%s, level:%d ,exp:%d", player1->name, player1->level, player1->exp);
 }
 /****************************************************************
  *  函数名称：
@@ -72,11 +71,8 @@ int FIGHT_GAME_COMPANY1(void *p, int gameDiff)
     default:
         break;
     }
-    printf("aaaaaa\n");
     player->exp += addExp;
-    printf("bbbbbbbbbb %d\n", player->exp);
     player->level = addExp / 10;
-    printf("ccccccccc %d\n", player->level);
     if(addExp == 0)
     {
         return 0;
