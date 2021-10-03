@@ -1,0 +1,5 @@
+.PHONTY:all
+
+all:
+	pwd
+	
