@@ -1,3 +1,0 @@
-BIN = 
-
-include ../common.mk

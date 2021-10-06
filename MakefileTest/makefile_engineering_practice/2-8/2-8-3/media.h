@@ -1,1 +1,0 @@
-void media_init();
