@@ -1,37 +1,96 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "dynamicArray.h"
 
+
+struct Person
+{
+   char name[64];
+   int age;
+};
 /****************************************************************
- *  º¯ÊıÃû³Æ£º
- *  ´´½¨ÈÕÆÚ£º2021-10-08 16:31:15
- *  ×÷Õß£ºxujunze
- *  ÊäÈë²ÎÊı£ºÎŞ
- *  Êä³ö²ÎÊı£ºÎŞ
- *  ·µ»ØÖµ£ºÎŞ
+ *  å‡½æ•°åç§°ï¼š
+ *  åˆ›å»ºæ—¥æœŸï¼š2021-10-08 16:31:15
+ *  ä½œè€…ï¼šxujunze
+ *  è¾“å…¥å‚æ•°ï¼šæ— 
+ *  è¾“å‡ºå‚æ•°ï¼šæ— 
+ *  è¿”å›å€¼ï¼šæ— 
 ******************************************************************/
-
+void myPrintPerson(void *data)
+{
+   struct Person * p = data;
+   printf("å§“å:%s å¹´é¾„:%d\n", p->name, p->age);
+}
 
 /****************************************************************
- *  º¯ÊıÃû³Æ£º
- *  ´´½¨ÈÕÆÚ£º2021-10-08 16:31:15
- *  ×÷Õß£ºxujunze
- *  ÊäÈë²ÎÊı£ºÎŞ
- *  Êä³ö²ÎÊı£ºÎŞ
- *  ·µ»ØÖµ£ºÎŞ
+ *  å‡½æ•°åç§°ï¼š
+ *  åˆ›å»ºæ—¥æœŸï¼š2021-10-08 16:31:15
+ *  ä½œè€…ï¼šxujunze
+ *  è¾“å…¥å‚æ•°ï¼šæ— 
+ *  è¾“å‡ºå‚æ•°ï¼šæ— 
+ *  è¿”å›å€¼ï¼šæ— 
 ******************************************************************/
-
+int myComparePerson(void * data1, void * data2)
+{
+   struct Person * p1 = data1;
+   struct Person * p2 = data2;
+   return (0 == strcmp(p1->name, p2->name)) && p1->age == p2->age;
+}
 
 /****************************************************************
- *  º¯ÊıÃû³Æ£ºmain
- *  ´´½¨ÈÕÆÚ£º2021-10-08 16:31:15
- *  ×÷Õß£ºxujunze
- *  ÊäÈë²ÎÊı£ºÎŞ
- *  Êä³ö²ÎÊı£ºÎŞ
- *  ·µ»ØÖµ£ºÎŞ
+ *  å‡½æ•°åç§°ï¼šmain
+ *  åˆ›å»ºæ—¥æœŸï¼š2021-10-08 16:31:15
+ *  ä½œè€…ï¼šxujunze
+ *  è¾“å…¥å‚æ•°ï¼šæ— 
+ *  è¾“å‡ºå‚æ•°ï¼šæ— 
+ *  è¿”å›å€¼ï¼šæ— 
 ******************************************************************/
 int main()
 {
+   struct dynamicArray * array = init_DynamicArray(4);
+
+   //å‡†å¤‡æ•°æ®
+   struct Person p1 = {"å®‰æŸ",  16};
+   struct Person p2 = {"é‡äº‘",  16};
+   struct Person p3 = {"èŠ­èŠ­æ‹‰",  18};
+   struct Person p4 = {"å¯è‰",  14};
+   struct Person p5 = {"ç´å›¢é•¿",  25};
+   struct Person p6 = {"å®µå®«",  21};
+
+   printf("æ’å…¥æ•°æ®å‰ï¼šå®¹é‡ï¼š%d  å¤§å°ï¼š%d\n", array->m_capacity, array->m_size);
+   insert_DynamicArray(array, 0, &p1);
+   insert_DynamicArray(array, 0, &p2);
+   insert_DynamicArray(array, 1, &p3);
+   insert_DynamicArray(array, 0, &p4);
+   insert_DynamicArray(array, -1, &p5);
+   insert_DynamicArray(array, 2, &p6);
+
+   //å¯è‰ é‡äº‘, å®µå®« èŠ­èŠ­æ‹‰,  å®‰æŸ ç´å›¢é•¿
+
+   //éå†æ•°ç»„
+   foreach_DynamicArray(array, myPrintPerson);
+   printf("\n\n");
+
+   removeByPos_DynamicArray(array, 2);
+   foreach_DynamicArray(array, myPrintPerson);
+   printf("\n\n");
+
+   struct Person p0 = {"å¯è‰", 14};
+   removeByValue_DynamicArray(array, &p0, myComparePerson);
+   foreach_DynamicArray(array, myPrintPerson);
+   printf("\n\n");
+
+   //æœ‰ä¸€ä¸ªä¸å¥½çš„åœ°æ–¹æ˜¯å¯ä»¥ç›´æ¥è®¿é—®å…¶ä¸­çš„æ•°æ®
+   // array->m_capacity= 0;
+   // array->m_size = 0;
+   // array->pAddr = NULL;
+
+   //æ¯ä¸ªå‡½æ•°éƒ½è¦æµ‹è¯•åˆ°ï¼Œç»è¿‡æµ‹è¯•ï¼Œå¦‚ä¸‹å‡½æ•°å°±å‘ç”Ÿäº†å´©æºƒé—®é¢˜
+   //é”€æ¯æ•°ç»„
+   destory_DynamicArray(array);
+   foreach_DynamicArray(array, myPrintPerson);
+   //array = NULL;
    
    return 0;
 }
