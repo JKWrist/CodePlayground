@@ -7,6 +7,7 @@
 static char g_str_private_key[4096] = {0};
 static char g_str_public_key[4096] = {0};
 
+//读取公钥和私钥数据
 int main()
 {
     struct stat st = {0};
