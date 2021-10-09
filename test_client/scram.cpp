@@ -150,6 +150,16 @@ int main()
     BIGNUM *bnn, *bne, *bnd;
     printf("1111111111111\n");
     r = RSA_generate_key(bits, e, NULL, NULL);
+
+    //为了验证每次生成的rsa是否是相同的，实际结果，不是每次都是相同的
+    // for (int i = 0; i < 15; i++)
+    // {
+    //     printf("\n\n\n");
+    //     r = RSA_generate_key(bits, e, NULL, NULL);
+    //     RSA_print_fp(stdout, r, 11);
+    //     printf("\n\n\n");
+    // }
+    
     RSA_print_fp(stdout, r, 11);
     RSA_free(r);
 
@@ -210,6 +220,7 @@ int main()
     RSA_free(rsa);
 
     fclose(Private_key_file);
+    fclose(Public_key_file);
 
     return 0;
 }
@@ -221,7 +232,7 @@ char *my_encrypt(char *str, char *path_key)
     RSA *p_rsa = NULL;
     FILE *file = NULL;
 
-    int rsa_len = 0; //flen为源文件长度�?? rsa_len为�?�钥长度
+    int rsa_len = 0; //flen为源文件长度 rsa_len为密钥长度
 
     //1.打开秘钥文件
     if ((file = fopen(path_key, "rb")) == NULL)
@@ -230,17 +241,17 @@ char *my_encrypt(char *str, char *path_key)
         goto End;
     }
 
-    //2.从公钥中获取 加密的�?�钥
+    //2.从公钥中获取 加密的密钥
     if ((p_rsa = PEM_read_RSA_PUBKEY(file, NULL, NULL, NULL)) == NULL)
     {
         ERR_print_errors_fp(stdout);
         goto End;
     }
 
-    //3.获取秘钥的长�??
+    //3.获取秘钥的长度
     rsa_len = RSA_size(p_rsa);
 
-    //4.为加密后的内�?? 申�?�空间（根据秘钥的长�??+1�??
+    //4.为加密后的 申请空间（根据秘钥的长度+1）
     p_en = (char *)malloc(rsa_len + 1);
     if (!p_en)
     {
@@ -249,7 +260,7 @@ char *my_encrypt(char *str, char *path_key)
     }
     memset(p_en, 0, rsa_len + 1);
 
-    //5.对内容进行加�??
+    //5.对内容进行加密
     if (RSA_public_encrypt(rsa_len, (unsigned char *)str, (unsigned char *)p_en, p_rsa, RSA_NO_PADDING) < 0)
     {
         perror("RSA_public_encrypt() error 2222222222");
@@ -258,7 +269,7 @@ char *my_encrypt(char *str, char *path_key)
 
 End:
 
-    //6.释放秘钥空间�?? 关闭文件
+    //6.释放秘钥空间 关闭文件
     if (p_rsa)
         RSA_free(p_rsa);
     if (file)
@@ -283,7 +294,7 @@ char *my_decrypt(char *str, char *path_key)
         goto End;
     }
 
-    //2.从�?�钥�??获取 解密的�?�钥
+    //2.从密钥获取 解密的密钥
     if ((p_rsa = PEM_read_RSAPrivateKey(file, NULL, NULL, NULL)) == NULL)
     {
         ERR_print_errors_fp(stdout);
@@ -293,7 +304,7 @@ char *my_decrypt(char *str, char *path_key)
     //3.获取秘钥的长度，
     rsa_len = RSA_size(p_rsa);
 
-    //4.为加密后的内�?? 申�?�空间（根据秘钥的长�??+1�??
+    //4.为加密后的内容 申请空间（根据秘钥的长度+1
     p_de = (char *)malloc(rsa_len + 1);
     if (!p_de)
     {
@@ -302,7 +313,7 @@ char *my_decrypt(char *str, char *path_key)
     }
     memset(p_de, 0, rsa_len + 1);
 
-    //5.对内容进行加�??
+    //5.对内容进行加密
     if (RSA_private_decrypt(rsa_len, (unsigned char *)str, (unsigned char *)p_de, p_rsa, RSA_NO_PADDING) < 0)
     {
         perror("RSA_public_encrypt() error ");
@@ -310,7 +321,7 @@ char *my_decrypt(char *str, char *path_key)
     }
 
 End:
-    //6.释放秘钥空间�?? 关闭文件
+    //6.释放秘钥空间 关闭文件
     if (p_rsa)
         RSA_free(p_rsa);
     if (file)
