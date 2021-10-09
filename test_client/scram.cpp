@@ -8,6 +8,10 @@
 #include <openssl/pem.h>
 #include <openssl/err.h>
 #include <openssl/ossl_typ.h>
+
+#include <openssl/bn.h>
+#include <openssl/md5.h>
+
 #define OPENSSLKEY "test.key"
 #define PUBLICKEY "test_pub.key"
 #define BUFFSIZE 1024
@@ -15,9 +19,6 @@
 #define MODULUS "C8FBCF21"
 #define PUBLIC_EXPONENT RSA_F4
 #define PRIVATE_EXPONENT "97B55D7D"
-
-char *my_encrypt(char *str, char *path_key); //加密
-char *my_decrypt(char *str, char *path_key); //解密
 
 void PrintHex(unsigned char *str, unsigned int len)
 {
@@ -69,8 +70,136 @@ void print_hex_str(const unsigned char *data, int length)
     std::cout << std::endl;
 }
 
-int main()
+/****************************************************************
+ *  函数名称：加密
+ *  创建日期：2021-10-09 14:12:31
+ *  作者：xujunze
+ *  输入参数：无
+ *  输出参数：无
+ *  返回值：无
+******************************************************************/
+char *my_encrypt(char *str, char *path_key)
 {
+    char *p_en = NULL;
+    RSA *p_rsa = NULL;
+    FILE *file = NULL;
+
+    int rsa_len = 0; //flen为源文件长度 rsa_len为密钥长度
+
+    //1.打开秘钥文件
+    if ((file = fopen(path_key, "rb")) == NULL)
+    {
+        perror("fopen() error 111111111 ");
+        goto End;
+    }
+
+    //2.从公钥中获取 加密的密钥
+    if ((p_rsa = PEM_read_RSA_PUBKEY(file, NULL, NULL, NULL)) == NULL)
+    {
+        ERR_print_errors_fp(stdout);
+        goto End;
+    }
+
+    //3.获取秘钥的长度
+    rsa_len = RSA_size(p_rsa);
+
+    //4.为加密后的 申请空间（根据秘钥的长度+1）
+    p_en = (char *)malloc(rsa_len + 1);
+    if (!p_en)
+    {
+        perror("malloc() error 2222222222");
+        goto End;
+    }
+    memset(p_en, 0, rsa_len + 1);
+
+    //5.对内容进行加密
+    if (RSA_public_encrypt(rsa_len, (unsigned char *)str, (unsigned char *)p_en, p_rsa, RSA_NO_PADDING) < 0)
+    {
+        perror("RSA_public_encrypt() error 2222222222");
+        goto End;
+    }
+
+End:
+
+    //6.释放秘钥空间 关闭文件
+    if (p_rsa)
+        RSA_free(p_rsa);
+    if (file)
+        fclose(file);
+
+    return p_en;
+}
+
+/****************************************************************
+ *  函数名称：解密
+ *  创建日期：2021-10-09 14:12:20
+ *  作者：xujunze
+ *  输入参数：无
+ *  输出参数：无
+ *  返回值：无
+******************************************************************/
+char *my_decrypt(char *str, char *path_key)
+{
+    char *p_de = NULL;
+    RSA *p_rsa = NULL;
+    FILE *file = NULL;
+    int rsa_len = 0;
+
+    //1.打开秘钥文件
+    file = fopen(path_key, "rb");
+    if (!file)
+    {
+        perror("fopen() error 22222222222");
+        goto End;
+    }
+
+    //2.从密钥获取 解密的密钥
+    if ((p_rsa = PEM_read_RSAPrivateKey(file, NULL, NULL, NULL)) == NULL)
+    {
+        ERR_print_errors_fp(stdout);
+        goto End;
+    }
+
+    //3.获取秘钥的长度，
+    rsa_len = RSA_size(p_rsa);
+
+    //4.为加密后的内容 申请空间（根据秘钥的长度+1
+    p_de = (char *)malloc(rsa_len + 1);
+    if (!p_de)
+    {
+        perror("malloc() error ");
+        goto End;
+    }
+    memset(p_de, 0, rsa_len + 1);
+
+    //5.对内容进行加密
+    if (RSA_private_decrypt(rsa_len, (unsigned char *)str, (unsigned char *)p_de, p_rsa, RSA_NO_PADDING) < 0)
+    {
+        perror("RSA_public_encrypt() error ");
+        goto End;
+    }
+
+End:
+    //6.释放秘钥空间 关闭文件
+    if (p_rsa)
+        RSA_free(p_rsa);
+    if (file)
+        fclose(file);
+
+    return p_de;
+}
+
+/****************************************************************
+ *  函数名称：
+ *  创建日期：2021-10-09 14:12:42
+ *  作者：xujunze
+ *  输入参数：无
+ *  输出参数：无
+ *  返回值：无
+******************************************************************/
+void test01()
+{
+    printf("%s %d\n", __func__, __LINE__);
 
     printf("1 g_salt : \n");
     const char *pass = "wwlh1234"; //"qwer1234";
@@ -126,7 +255,8 @@ int main()
     strcat(authMsg2, servernonce);
     strcat(authMsg2, ",");
     strcat(authMsg2, servernonce);
-    std::cout << "6662 " << authMsg2 << std::endl << std::endl;
+    std::cout << "6662 " << authMsg2 << std::endl
+              << std::endl;
 
     unsigned char clientSign[32];
     HMAC(EVP_sha256(), (const unsigned char *)authMsg.c_str(), (int)authMsg.length(), g_storeKey, 32,
@@ -141,29 +271,29 @@ int main()
         clientProof[i] = clientKey[i] ^ clientSign[i];
     }
     print_hex_str(clientProof, 32);
+}
 
-    ///////////////////////////////////////////////////////////////////////////////////
+/****************************************************************
+ *  函数名称：
+ *  创建日期：2021-10-09 14:12:48
+ *  作者：xujunze
+ *  输入参数：无
+ *  输出参数：无
+ *  返回值：无
+******************************************************************/
+void test02()
+{
+    printf("%s %d\n", __func__, __LINE__);
 
     RSA *r;
     int bits = 512, ret, len;
     unsigned long e = RSA_3;
     BIGNUM *bnn, *bne, *bnd;
-    printf("1111111111111\n");
-    r = RSA_generate_key(bits, e, NULL, NULL);
-
-    //为了验证每次生成的rsa是否是相同的，实际结果，不是每次都是相同的
-    // for (int i = 0; i < 15; i++)
-    // {
-    //     printf("\n\n\n");
-    //     r = RSA_generate_key(bits, e, NULL, NULL);
-    //     RSA_print_fp(stdout, r, 11);
-    //     printf("\n\n\n");
-    // }
     
+    r = RSA_generate_key(bits, e, NULL, NULL);
     RSA_print_fp(stdout, r, 11);
     RSA_free(r);
 
-    printf("22222222222222\n");
     bne = BN_new();
     ret = BN_set_word(bne, e);
     r = RSA_new();
@@ -172,12 +302,22 @@ int main()
     if (ret != 1)
     {
         printf("RSA_generate_key_ex err!\n");
-        return -1;
     }
 
     RSA_free(r);
+}
+/****************************************************************
+ *  函数名称：
+ *  创建日期：2021-10-09 14:12:52
+ *  作者：xujunze
+ *  输入参数：无
+ *  输出参数：无
+ *  返回值：无
+******************************************************************/
+void test03()
+{
+    printf("%s %d\n", __func__, __LINE__);
 
-    ///////////////////////////////////////////////////////////////////////////////////////////
     char *source = "i like dancing !!!";
 
     char *ptf_en, *ptf_de;
@@ -196,8 +336,19 @@ int main()
         free(ptf_en);
     if (ptf_de)
         free(ptf_de);
-    //////////////////////////////////////////////////////////////////////////////////
+}
 
+/****************************************************************
+ *  函数名称：
+ *  创建日期：2021-10-09 14:12:57
+ *  作者：xujunze
+ *  输入参数：无
+ *  输出参数：无
+ *  返回值：无
+******************************************************************/
+void test04()
+{
+    printf("%s %d\n", __func__, __LINE__);
 
     FILE *Private_key_file;
     FILE *Public_key_file;
@@ -221,111 +372,78 @@ int main()
 
     fclose(Private_key_file);
     fclose(Public_key_file);
+}
 
+/****************************************************************
+ *  函数名称：
+ *  创建日期：2021-10-09 14:14:38
+ *  作者：xujunze
+ *  输入参数：无
+ *  输出参数：无
+ *  返回值：无
+******************************************************************/
+void test05()
+{
+    printf("%s %d\n", __func__, __LINE__);
+
+    // //产生大数
+    // BIGNUM *a = BN_new();
+    // BN_rand(a, 512, 0, 0); //生成的大数占512个字节
+    // printf("随机产生的大数转化成16进制后保存为:%s\n", BN_bn2hex(a));
+
+    ;
+    int bits = 512, ret, len;
+    unsigned long e = RSA_3;
+    // srand(time(NULL));
+    // unsigned long e = rand() % 100;
+    // printf("e : %d\n", e);
+    const BIGNUM *bnn_const, *bne_const, *bnd_const;
+
+    //为了验证每次生成的rsa是否是相同的，实际结果，不是每次都是相同的
+    for (int i = 0; i < 15; i++)
+    {
+        printf("\n\n\nRSA:\n");
+        RSA *r = RSA_generate_key(bits, e, NULL, NULL);
+        //RSA *r = RSA_new();
+        printf("\n成功生成RSA密钥对\n");
+
+        RSA_print_fp(stdout, r, 11);
+        printf("BIGNUM:\n");
+        RSA_get0_key(r, &bnn_const, &bne_const, &bnd_const);
+        printf("bnn_const:%s\n", BN_bn2hex(bnn_const));
+        printf("bne_const:%s\n", BN_bn2hex(bne_const));
+        printf("bnd_const:%s\n", BN_bn2hex(bnd_const));
+        printf("\n\n\n");
+
+        RSA_free(r);
+    }
+}
+
+/****************************************************************
+ *  函数名称：
+ *  创建日期：2021-10-09 14:13:01
+ *  作者：xujunze
+ *  输入参数：无
+ *  输出参数：无
+ *  返回值：无
+******************************************************************/
+int main()
+{
+    //联通
+    //test1();
+
+    //RSA生成， n、e、d提取
+    //test02();
+
+    //使用文件加密解密
+    //test03();
+
+    //生成公钥，私钥
+    //test04();
+
+    //随机生成RSA，并且打印其中的BIGNUM数据结构字符串
+    test05(); 
+    
     return 0;
 }
 
-//加密
-char *my_encrypt(char *str, char *path_key)
-{
-    char *p_en = NULL;
-    RSA *p_rsa = NULL;
-    FILE *file = NULL;
-
-    int rsa_len = 0; //flen为源文件长度 rsa_len为密钥长度
-
-    //1.打开秘钥文件
-    if ((file = fopen(path_key, "rb")) == NULL)
-    {
-        perror("fopen() error 111111111 ");
-        goto End;
-    }
-
-    //2.从公钥中获取 加密的密钥
-    if ((p_rsa = PEM_read_RSA_PUBKEY(file, NULL, NULL, NULL)) == NULL)
-    {
-        ERR_print_errors_fp(stdout);
-        goto End;
-    }
-
-    //3.获取秘钥的长度
-    rsa_len = RSA_size(p_rsa);
-
-    //4.为加密后的 申请空间（根据秘钥的长度+1）
-    p_en = (char *)malloc(rsa_len + 1);
-    if (!p_en)
-    {
-        perror("malloc() error 2222222222");
-        goto End;
-    }
-    memset(p_en, 0, rsa_len + 1);
-
-    //5.对内容进行加密
-    if (RSA_public_encrypt(rsa_len, (unsigned char *)str, (unsigned char *)p_en, p_rsa, RSA_NO_PADDING) < 0)
-    {
-        perror("RSA_public_encrypt() error 2222222222");
-        goto End;
-    }
-
-End:
-
-    //6.释放秘钥空间 关闭文件
-    if (p_rsa)
-        RSA_free(p_rsa);
-    if (file)
-        fclose(file);
-
-    return p_en;
-}
-
-//解密
-char *my_decrypt(char *str, char *path_key)
-{
-    char *p_de = NULL;
-    RSA *p_rsa = NULL;
-    FILE *file = NULL;
-    int rsa_len = 0;
-
-    //1.打开秘钥文件
-    file = fopen(path_key, "rb");
-    if (!file)
-    {
-        perror("fopen() error 22222222222");
-        goto End;
-    }
-
-    //2.从密钥获取 解密的密钥
-    if ((p_rsa = PEM_read_RSAPrivateKey(file, NULL, NULL, NULL)) == NULL)
-    {
-        ERR_print_errors_fp(stdout);
-        goto End;
-    }
-
-    //3.获取秘钥的长度，
-    rsa_len = RSA_size(p_rsa);
-
-    //4.为加密后的内容 申请空间（根据秘钥的长度+1
-    p_de = (char *)malloc(rsa_len + 1);
-    if (!p_de)
-    {
-        perror("malloc() error ");
-        goto End;
-    }
-    memset(p_de, 0, rsa_len + 1);
-
-    //5.对内容进行加密
-    if (RSA_private_decrypt(rsa_len, (unsigned char *)str, (unsigned char *)p_de, p_rsa, RSA_NO_PADDING) < 0)
-    {
-        perror("RSA_public_encrypt() error ");
-        goto End;
-    }
-
-End:
-    //6.释放秘钥空间 关闭文件
-    if (p_rsa)
-        RSA_free(p_rsa);
-    if (file)
-        fclose(file);
-
-    return p_de;
-}
