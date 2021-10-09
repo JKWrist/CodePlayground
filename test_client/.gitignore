@@ -1,0 +1,11 @@
+CMakeCache.txt
+
+CMakeFiles/
+
+cmake_install.cmake
+
+prikey.pem
+
+pubkey.pem
+
+scram_test
