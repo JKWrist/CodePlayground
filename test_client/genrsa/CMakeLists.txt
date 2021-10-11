@@ -9,4 +9,3 @@ link_directories(/usr/local/opt/openssl@1.1/lib /usr/local/opt/boost/lib)
 link_libraries(libcrypto.a libssl.a)
 
 add_executable(a.out genrsa.c)
-#add_executable(a.out genrsa.c apps.c)

@@ -338,6 +338,7 @@ void test03()
 
     if (ptf_en)
         free(ptf_en);
+        
     if (ptf_de)
         free(ptf_de);
 }
