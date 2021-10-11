@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <math.h>
+#include <unistd.h>
 #include <openssl/evp.h>
 #include <openssl/hmac.h>
 #include <openssl/sha.h>
@@ -19,6 +21,8 @@
 #define MODULUS "C8FBCF21"
 #define PUBLIC_EXPONENT RSA_F4
 #define PRIVATE_EXPONENT "97B55D7D"
+
+using namespace std;
 
 void PrintHex(unsigned char *str, unsigned int len)
 {
@@ -374,6 +378,45 @@ void test04()
     fclose(Public_key_file);
 }
 
+bool judgeprime(int i)
+{
+    if (i < 3)
+    {
+        return false;
+    }
+
+    int j;
+    for (j = 2; j <= sqrt(i); j++)
+        if (i % j == 0)
+            break;
+    if (j > sqrt(i))
+        return true;
+}
+
+int getprime()
+{
+    int i;
+    int a;
+    srand((unsigned)time(NULL));
+
+    a = rand() % 100;
+    if (judgeprime(a))
+    {
+        return a;
+    }
+    else
+    {
+        while (1)
+        {
+            a = (a + 1) % 100;
+            if (judgeprime(a))
+            {
+                return a;
+            }
+        }
+    }
+}
+
 /****************************************************************
  *  函数名称：
  *  创建日期：2021-10-09 14:14:38
@@ -391,12 +434,11 @@ void test05()
     // BN_rand(a, 512, 0, 0); //生成的大数占512个字节
     // printf("随机产生的大数转化成16进制后保存为:%s\n", BN_bn2hex(a));
 
-    ;
     int bits = 512, ret, len;
-    unsigned long e = RSA_3;
-    // srand(time(NULL));
-    // unsigned long e = rand() % 100;
-    // printf("e : %d\n", e);
+    //unsigned long e = 65537;
+    //unsigned long e = RSA_3;
+    unsigned long e = getprime();
+    printf("e : %d\n", e);
     const BIGNUM *bnn_const, *bne_const, *bnd_const;
 
     //为了验证每次生成的rsa是否是相同的，实际结果，不是每次都是相同的
@@ -410,12 +452,38 @@ void test05()
         RSA_print_fp(stdout, r, 11);
         printf("BIGNUM:\n");
         RSA_get0_key(r, &bnn_const, &bne_const, &bnd_const);
-        printf("bnn_const:%s\n", BN_bn2hex(bnn_const));
-        printf("bne_const:%s\n", BN_bn2hex(bne_const));
-        printf("bnd_const:%s\n", BN_bn2hex(bnd_const));
+        static char g_e_str[24] = {0};
+        static char g_d_str[512] = {0};
+        static char g_n_str[512] = {0};
+
+        sscanf(BN_bn2hex(bne_const), "%s", g_e_str);
+        sscanf(BN_bn2hex(bnn_const), "%s", g_n_str);
+        sscanf(BN_bn2hex(bnd_const), "%s", g_d_str);
+
+        printf("bne_const:%s\n", g_e_str);
+        printf("bnn_const:%s\n", g_n_str);
+        printf("bnd_const:%s\n", g_d_str);
         printf("\n\n\n");
 
         RSA_free(r);
+    }
+}
+
+/****************************************************************
+ *  函数名称：
+ *  创建日期：2021-10-09 15:50:39
+ *  作者：xujunze
+ *  输入参数：无
+ *  输出参数：无
+ *  返回值：无
+******************************************************************/
+void test06()
+{
+
+    for (int i = 0; i < 30; i++)
+    {
+        printf("rand %d\n", getprime());
+        sleep(1);
     }
 }
 
@@ -442,8 +510,11 @@ int main()
     //test04();
 
     //随机生成RSA，并且打印其中的BIGNUM数据结构字符串
-    test05(); 
-    
+    test05();
+
+    //生成随机质数
+    //test06();
+
     return 0;
 }
 
