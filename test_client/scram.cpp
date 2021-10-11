@@ -452,17 +452,18 @@ void test05()
         RSA_print_fp(stdout, r, 11);
         printf("BIGNUM:\n");
         RSA_get0_key(r, &bnn_const, &bne_const, &bnd_const);
-        static char g_e_str[24] = {0};
+        static char g_e_str[512] = {0};
         static char g_d_str[512] = {0};
         static char g_n_str[512] = {0};
 
-        sscanf(BN_bn2hex(bne_const), "%s", g_e_str);
+        sscanf(BN_bn2dec(bne_const), "%s", g_e_str);
+
         sscanf(BN_bn2hex(bnn_const), "%s", g_n_str);
         sscanf(BN_bn2hex(bnd_const), "%s", g_d_str);
 
-        printf("bne_const:%s\n", g_e_str);
-        printf("bnn_const:%s\n", g_n_str);
-        printf("bnd_const:%s\n", g_d_str);
+        printf("bne_const:%s len %d\n", g_e_str, strlen(g_e_str));
+        printf("bnn_const:%s len %d\n", g_n_str, strlen(g_n_str));
+        printf("bnd_const:%s len %d\n", g_d_str, strlen(g_d_str));
         printf("\n\n\n");
 
         RSA_free(r);
