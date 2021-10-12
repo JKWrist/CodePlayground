@@ -1,175 +1,67 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "seqStack.h"
 
-//放在 .h文件
-//到时提供给用户的话，用户就可以看到结构体元素
-
-//放在 .c文件
-//到时可以封装成库文件提供给用户，用户看不到这个里面的数据类型，封装较好
-
-// struct SStack
-// {
-//     void *data[MAX]; //栈的数组
-//     int m_size;
-// };
-
-// typedef void *SeqStack;
+struct Person
+{
+    char name[64];
+    int age;
+};
 
 /****************************************************************
  *  函数名称：
- *  创建日期：2021-10-11 20:21:59
+ *  创建日期：2021-10-12 11:56:13
  *  作者：xujunze
  *  输入参数：无
  *  输出参数：无
  *  返回值：无
 ******************************************************************/
-//初始化栈
-SeqStack init_SeqStack()
+void test01()
 {
-    struct SStack * myStack = malloc(sizeof(struct SStack));
+    //初始化栈
+    SeqStack mystack = init_SeqStack();
 
-    if(NULL == myStack)
+    //创建数据
+    struct Person p1 = {"aaa", 10};
+    struct Person p2 = {"bbb", 20};
+    struct Person p3 = {"ccc", 30};
+    struct Person p4 = {"ddd", 40};
+    struct Person p5 = {"eee", 50};
+
+    //入栈
+    push_SeqStack(mystack, &p1);
+    push_SeqStack(mystack, &p2);
+    push_SeqStack(mystack, &p3);
+    push_SeqStack(mystack, &p4);
+    push_SeqStack(mystack, &p5);
+
+    printf("栈的元素个数为 : %d\n", size_SeqStack(mystack));
+
+    while (isEmpty_SeqStack(mystack) != 1)
     {
-        return NULL;
+        struct Person *p = top_SeqStack(mystack);
+        printf("%s %d\n", p->name, p->age);
+        //出栈
+        pop_SeqStack(mystack);
+        printf("栈的元素个数为 : %d\n", size_SeqStack(mystack));
     }
 
-    //初始化数组
-    memset(myStack, 0, sizeof(void *) * MAX);
-
-    //初始化栈大小
-    myStack->m_size = 0;
-
-    return myStack;
+    //销毁栈
+    destory_SeqStack(mystack);
 }
 
 /****************************************************************
- *  函数名称：
- *  创建日期：2021-10-12 09:39:05
+ *  函数名称：main
+ *  创建日期：2021-10-11 19:35:17
  *  作者：xujunze
  *  输入参数：无
  *  输出参数：无
  *  返回值：无
 ******************************************************************/
-//入栈
-void push_SeqStack(SeqStack stack, void *data)
+int main()
 {
-    if(NULL == stack || NULL == data)
-    {
-        return;
-    }
-
-    struct SStack * myStack = stack;
-
-    if (MAX == myStack->m_size)
-    {
-        return;
-    }
-
-    myStack->data[myStack->m_size] = data;
-    myStack->m_size++;
-}
-
-/****************************************************************
- *  函数名称：
- *  创建日期：2021-10-12 09:57:06
- *  作者：xujunze
- *  输入参数：无
- *  输出参数：无
- *  返回值：无
-******************************************************************/
-//出栈
-void pop_SeqStack(SeqStack stack)
-{
-    if(NULL == stack)
-    {
-        return;
-    }
-
-    struct SStack * myStack = stack;
-
-    if(0 == myStack->m_size)
-    {
-        return;
-    }
-
-    myStack->data[myStack->m_size - 1] = NULL;
-    myStack->m_size--;
-}
-
-/****************************************************************
- *  函数名称：
- *  创建日期：2021-10-12 10:07:53
- *  作者：xujunze
- *  输入参数：无
- *  输出参数：无
- *  返回值：无
-******************************************************************/
-//返回栈顶
-void *top_SeqStack(SeqStack stack)
-{
-    if(NULL == stack)
-    {
-        return NULL;
-    }
-
-    struct SStack * myStack = stack;
-    return myStack->data[myStack->m_size - 1];
-}
-
-/****************************************************************
- *  函数名称：
- *  创建日期：2021-10-12 10:07:57
- *  作者：xujunze
- *  输入参数：无
- *  输出参数：无
- *  返回值：无
-******************************************************************/
-//返回栈大小
-int size_SeqStack(SeqStack stack)
-{
-    if (NULL == stack)
-    {
-        return -1;
-    }
-
-    struct SStack * myStack = stack;
-    return myStack->m_size;
-}
-
-/****************************************************************
- *  函数名称：
- *  创建日期：2021-10-12 10:08:00
- *  作者：xujunze
- *  输入参数：无
- *  输出参数：无
- *  返回值：无
-******************************************************************/
-//判断栈是否为空
-int isEmpty_SeqStact(SeqStack stack)
-{
-    if (NULL == stack)
-    {
-        return -1;
-    }
-    struct SStack *myStack = stack;
+    test01(); 
     
-    return 0 == myStack->m_size;
-}
-
-/****************************************************************
- *  函数名称：
- *  创建日期：2021-10-12 10:08:04
- *  作者：xujunze
- *  输入参数：无
- *  输出参数：无
- *  返回值：无
-******************************************************************/
-//销毁栈
-void destory_SeqStack(SeqStack stack)
-{
-    if (NULL == stack)
-    {
-        return;
-    }
-
-    struct SStack * 
+    return 0;
 }

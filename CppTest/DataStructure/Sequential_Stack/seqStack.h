@@ -28,7 +28,7 @@ void * top_SeqStack(SeqStack stack);
 int size_SeqStack(SeqStack stack);
 
 //判断栈是否为空
-int isEmpty_SeqStact(SeqStack stack);
+int isEmpty_SeqStack(SeqStack stack);
 
 //销毁栈
 void destory_SeqStack(SeqStack stack);
