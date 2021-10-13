@@ -39,3 +39,17 @@
 
 #ssh
 id_rsa*
+
+#CMake
+bin/
+build/
+CMakeCache.txt
+CMakeLists.txt.user
+CMakeFiles
+CMakeScripts
+Testing
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+
