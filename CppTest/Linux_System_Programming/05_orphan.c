@@ -7,10 +7,9 @@
 #include <fcntl.h>
 #include <errno.h>
 
-
 /****************************************************************
  *  函数名称：main
- *  创建日期：2021-10-20 20:53:50
+ *  创建日期：2021-10-21 11:01:53
  *  作者：xujunze
  *  输入参数：无
  *  输出参数：无
@@ -18,27 +17,24 @@
 ******************************************************************/
 int main(int argc, char *argv[])
 {
-    printf("brefore fork pid = %d\n", getpid());
-
     pid_t pid = fork();
     if(pid < 0)
     {
-        perror("fork error");
-        return -1;
+        perror("fork errror");
     }
-    else if(pid > 0)
-    {   
-        printf("父进程\n");
-        printf("fork()返回值  [%d]\n", pid);
-        printf("father pid==[%d], fpid==[%d]\n", getpid(), getppid());
-        sleep(1);
-    }
-    else if(pid == 0)
+    else if( pid > 0)
     {
-        printf("子进程\n");
-        printf("child pid==[%d], fpid==[%d]\n", getpid(), getppid());
+        //father
+        sleep(2);
+        printf("father\n");
     }
-
-    printf("after fork pid = %d\n", getpid());
+    else if( pid == 0)
+    {
+        //child
+        sleep(1);
+        printf("child\n");
+        sleep(2);
+        printf("pid %d ppid %d\n", getpid(), getppid());
+    }
     return 0;
 }

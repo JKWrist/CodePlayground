@@ -7,10 +7,11 @@
 #include <fcntl.h>
 #include <errno.h>
 
+int g_var = 99;
 
 /****************************************************************
  *  函数名称：main
- *  创建日期：2021-10-20 20:53:50
+ *  创建日期：2021-10-21 10:48:17
  *  作者：xujunze
  *  输入参数：无
  *  输出参数：无
@@ -18,27 +19,27 @@
 ******************************************************************/
 int main(int argc, char *argv[])
 {
-    printf("brefore fork pid = %d\n", getpid());
-
+    //创建子进程
     pid_t pid = fork();
     if(pid < 0)
     {
+        //fork失败
         perror("fork error");
         return -1;
     }
-    else if(pid > 0)
-    {   
-        printf("父进程\n");
-        printf("fork()返回值  [%d]\n", pid);
-        printf("father pid==[%d], fpid==[%d]\n", getpid(), getppid());
-        sleep(1);
-    }
-    else if(pid == 0)
+    else if( pid > 0)
     {
-        printf("子进程\n");
-        printf("child pid==[%d], fpid==[%d]\n", getpid(), getppid());
+        //父进程
+        printf("fork return = %d\n", pid);
+        printf("father pid=[%d], ppid[%d]\n", getpid(), getppid());
+        g_var++;
+        printf("father g_var %d  %p\n", g_var, &g_var);
     }
-
-    printf("after fork pid = %d\n", getpid());
+    else if( pid == 0)
+    {
+        //子进程
+        printf("child pid=[%d], ppid[%d]\n", getpid(), getppid());
+        printf("child g_var %d  %p\n", g_var, &g_var);
+    }
     return 0;
 }

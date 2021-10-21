@@ -7,10 +7,9 @@
 #include <fcntl.h>
 #include <errno.h>
 
-
 /****************************************************************
  *  函数名称：main
- *  创建日期：2021-10-20 20:53:50
+ *  创建日期：2021-10-21 15:03:07
  *  作者：xujunze
  *  输入参数：无
  *  输出参数：无
@@ -18,27 +17,26 @@
 ******************************************************************/
 int main(int argc, char *argv[])
 {
-    printf("brefore fork pid = %d\n", getpid());
-
+    //创建子进程
     pid_t pid = fork();
-    if(pid < 0)
+    if(pid <  0)
     {
-        perror("fork error");
+        perror("fork errror");
         return -1;
     }
     else if(pid > 0)
-    {   
-        printf("父进程\n");
-        printf("fork()返回值  [%d]\n", pid);
-        printf("father pid==[%d], fpid==[%d]\n", getpid(), getppid());
-        sleep(1);
+    {
+        printf("faather %d\n", getpid());
     }
     else if(pid == 0)
     {
-        printf("子进程\n");
-        printf("child pid==[%d], fpid==[%d]\n", getpid(), getppid());
+        printf("child %d\n", getpid());
+        //execl("/bin/ls", "ls", "-l", NULL);
+        //如果是本程序编译的a.out 会造成死循环
+        //execl("./test.out", "hello", "ni", "hoa", NULL);
+
+
     }
 
-    printf("after fork pid = %d\n", getpid());
     return 0;
 }
