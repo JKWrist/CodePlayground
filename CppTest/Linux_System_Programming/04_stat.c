@@ -18,8 +18,16 @@
 int main(int argc, char *argv[])
 {
    struct stat st;
+   
+   if(argc < 2)
+   {
+      printf("1 argc : %d\n", argc);
+   }
+   else
+      printf("2 argc : %d\n", argc);
+   printf("3 argc : %d\n", argc);
+
    stat(argv[1], &st);
    printf("size:%d uid:%d, gid:%d", st.st_size, st.st_uid, st.st_gid);
-   
    return 0;
 }
