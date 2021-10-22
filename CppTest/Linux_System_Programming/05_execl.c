@@ -34,8 +34,18 @@ int main(int argc, char *argv[])
         //execl("/bin/ls", "ls", "-l", NULL);
         //如果是本程序编译的a.out 会造成死循环
         //execl("./test.out", "hello", "ni", "hoa", NULL);
+        // execl("/usr/bin/gcc", "gcc", "-o", "test.out", "05_test.c", NULL);
+        
+        // printf("111\n");
 
+        //注：execl的原理是用一个新的程序替换了当前进程的代码段，数据段，堆和栈
+        //原有进程空间没有发生变化，变没有创建你新的进程， 进程pid没有变化
+        // execl("./test.out", "test.out", "ni", "hao", NULL);
 
+        //execlp("ls", "ls", "-l", NULL);
+        //execlp("./test.out", "Testing", "-l", NULL);
+
+        execl("./test.out", "Testing", "-l", "ni", "hao", NULL);
     }
 
     return 0;
