@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
     printf("len %d\n", len);
     //建立共享映射区
-    void * addr = mmap(NULL, len, PROT_READ|PROT_READ, MAP_SHARED, fd, 0);
+    void * addr = mmap(NULL, len, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
     printf("addr %p\n", addr); 
     
     if (addr == MAP_FAILED)
