@@ -381,26 +381,35 @@ void Parse_File_Json(void)
 
 void Delete_Json_Item(cJSON *c)
 {
+    printf("11111111111\n");
     while (c)
     {
-        cJSON_DeleteItemFromObject(c, "neighbor_rssi");
-        cJSON_DeleteItemFromObject(c, "child_rssi");
-        cJSON_DeleteItemFromObject(c, "station_rssi");
-        cJSON_DeleteItemFromObject(c, "station_downlink");
-        cJSON_DeleteItemFromObject(c, "station_uplink");
-        cJSON_DeleteItemFromObject(c, "bss_transition_support");
-        cJSON_DeleteItemFromObject(c, "model_name");
-        cJSON_DeleteItemFromObject(c, "manufacturer");
-        cJSON_DeleteItemFromObject(c, "neighbor_devices");
-        cJSON_DeleteItemFromObject(c, "ip_addr");
-        cJSON_DeleteItemFromObject(c, "station_mac");
+        printf("2222222\n");
+        //注意，key最后面有一个空格, 前面也有一个空格
+        cJSON_DeleteItemFromObject(c, " neighbor_rssi ");
+        cJSON_DeleteItemFromObject(c, " child_rssi ");
+        cJSON_DeleteItemFromObject(c, " station_rssi ");
+        cJSON_DeleteItemFromObject(c, " station_downlink ");
+        cJSON_DeleteItemFromObject(c, " station_uplink ");
+        cJSON_DeleteItemFromObject(c, " bss_transition_support ");
+        cJSON_DeleteItemFromObject(c, " model_name ");
+        cJSON_DeleteItemFromObject(c, " manufacturer ");
+        cJSON_DeleteItemFromObject(c, " neighbor_devices ");
+        cJSON_DeleteItemFromObject(c, " ip_addr ");
+        cJSON_DeleteItemFromObject(c, " station_mac ");
+        //device_name
+        cJSON_DeleteItemFromObject(c, " device_name ");
         if (c->child)
         {
             Delete_Json_Item(c->child);
         }
-        else if (c->next)
+        // else if (c->next)
+        // {
+        //     Delete_Json_Item(c->next);
+        // }
+        if (NULL != c->valuestring)
         {
-            Delete_Json_Item(c->next);
+            printf("%s\n", c->valuestring);
         }
         c = c->next;
     }
@@ -417,13 +426,20 @@ void Delete_Json_Item2(cJSON *c)
         cJSON_DeleteItemFromObject(c, "code_day");
         cJSON_DeleteItemFromObject(c, "high");
         cJSON_DeleteItemFromObject(c, "low");
+        //wind_direction_degree
+        cJSON_DeleteItemFromObject(c, "wind_direction_degree");
+
         if (c->child)
         {
             Delete_Json_Item2(c->child);
         }
-        else if (c->next)
+        // else if (c->next)
+        // {
+        //     Delete_Json_Item2(c->next);
+        // }
+        if (NULL != c->valuestring)
         {
-            Delete_Json_Item2(c->next);
+            printf("%s\n", c->valuestring);
         }
         c = c->next;
     }
@@ -432,41 +448,41 @@ void Delete_Json_Item2(cJSON *c)
 //false
 void Delete_Json_Item_False(cJSON *c)
 {
-    cJSON * ptmp;
+    cJSON *ptmp;
     // while (c)
     // {
-        cJSON_DeleteItemFromObject(c, "neighbor_rssi");
-        cJSON_DeleteItemFromObject(c, "child_rssi");
-        cJSON_DeleteItemFromObject(c, "station_rssi");
-        cJSON_DeleteItemFromObject(c, "station_downlink");
-        cJSON_DeleteItemFromObject(c, "station_uplink");
-        cJSON_DeleteItemFromObject(c, "bss_transition_support");
-        cJSON_DeleteItemFromObject(c, "model_name");
-        cJSON_DeleteItemFromObject(c, "manufacturer");
-        cJSON_DeleteItemFromObject(c, "neighbor_devices");
-        cJSON_DeleteItemFromObject(c, "ip_addr");
-        cJSON_DeleteItemFromObject(c, "station_mac");
-        if (c->child)
-        {
-            Delete_Json_Item_False(c->child);
-        }
-        // if (c->child)
-        // {
-        //     //printf("11111\n");
-        //     Delete_Json_Item_False(c->child);
-        //     c = c->child;
-        // }
-        // else if (c->next)
-        // {
-        //     //printf("22222\n");
-        //     Delete_Json_Item_False(c->next);
-        //     c = c->next;
-        // }
-        // else
-        // {
-        //     //printf("33333\n");
-        //     break;
-        // }
+    cJSON_DeleteItemFromObject(c, "neighbor_rssi");
+    cJSON_DeleteItemFromObject(c, "child_rssi");
+    cJSON_DeleteItemFromObject(c, "station_rssi");
+    cJSON_DeleteItemFromObject(c, "station_downlink");
+    cJSON_DeleteItemFromObject(c, "station_uplink");
+    cJSON_DeleteItemFromObject(c, "bss_transition_support");
+    cJSON_DeleteItemFromObject(c, "model_name");
+    cJSON_DeleteItemFromObject(c, "manufacturer");
+    cJSON_DeleteItemFromObject(c, "neighbor_devices");
+    cJSON_DeleteItemFromObject(c, "ip_addr");
+    cJSON_DeleteItemFromObject(c, "station_mac");
+    if (c->child)
+    {
+        Delete_Json_Item_False(c->child);
+    }
+    // if (c->child)
+    // {
+    //     //printf("11111\n");
+    //     Delete_Json_Item_False(c->child);
+    //     c = c->child;
+    // }
+    // else if (c->next)
+    // {
+    //     //printf("22222\n");
+    //     Delete_Json_Item_False(c->next);
+    //     c = c->next;
+    // }
+    // else
+    // {
+    //     //printf("33333\n");
+    //     break;
+    // }
     // }
 }
 
@@ -474,7 +490,6 @@ void test_delete_item(void)
 {
 
     cJSON *root = cJSON_Parse(topology_json);
-    //cJSON *root = cJSON_Parse(seniverse_forcast_json);
     if (root)
     {
         printf("JSON格式正确\n");
@@ -484,6 +499,23 @@ void test_delete_item(void)
         printf("\n\n\n\n");
 
         Delete_Json_Item(root);
+        p = cJSON_Print(root);
+        printf("删除后2  JSON字符串:\n%s\n", p);
+    }
+}
+
+void test_delete_item2(void)
+{
+    cJSON *root = cJSON_Parse(seniverse_forcast_json);
+    if (root)
+    {
+        printf("JSON格式正确\n");
+        char *p = cJSON_Print(root);
+        printf("删除前1  JSON字符串:\n%s\n", p);
+
+        printf("\n\n\n\n");
+
+        Delete_Json_Item2(root);
         p = cJSON_Print(root);
         printf("删除后2  JSON字符串:\n%s\n", p);
     }

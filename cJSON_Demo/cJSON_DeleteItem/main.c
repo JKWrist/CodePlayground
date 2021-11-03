@@ -12,7 +12,11 @@ int main()
     // Parse_Oil_Price_Json();             //解析油价信息，一个数组内嵌套5个数组，每个数组包含5个字符串元素
     // Parse_File_Json();
 
+    //删除mesh节点
     test_delete_item();
+    
+    //删除天气节点
+    //test_delete_item2();
 
     printf("\n");
     return 0;

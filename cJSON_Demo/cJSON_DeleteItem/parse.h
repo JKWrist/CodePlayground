@@ -13,6 +13,7 @@ void Parse_Oil_Price_Json(void);
 void Parse_File_Json(void);
 
 void test_delete_item(void);
+void test_delete_item2(void);
 
 char *textFileRead(char *filename);
 int get_file_line_number(char *filename);

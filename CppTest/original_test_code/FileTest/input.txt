@@ -1,7 +1,0 @@
-int main()
-{
-asdasdhn
-helllop
-}
-ï¼:wq
-:wq
