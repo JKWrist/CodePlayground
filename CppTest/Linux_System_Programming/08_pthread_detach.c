@@ -10,8 +10,8 @@
 
 void * mythread(void * arg)
 {
-    printf("child thread, pid == [%d], id == [%d]\n", getpid(), thread_self());
     sleep(3);
+    printf("child thread, pid = [%d], id = [%ld]\n", getpid(), pthread_self());
 }
 
 /****************************************************************
@@ -25,6 +25,32 @@ void * mythread(void * arg)
 int main(int argc, char *argv[])
 {
     pthread_t thread;
-    int ret = pthread_create(&thread, NULL, mythread, BULL);
+    int ret = pthread_create(&thread, NULL, mythread, NULL);
+    if(ret != 0)
+    {
+        printf("pthread_create error, [%s]\n", strerror(ret));
+    }
+    printf("main thread, pid = [%d], id = [%ld]\n", getpid(), pthread_self());
+
+    //设置子线程为分离属性
+    ret = pthread_detach(thread);
+    if(ret != 0)
+    {
+        printf("pthread_detach error [%s]\n", strerror(ret));
+    }
+
+    //子线程设置分离属性，则pthread_join不再阻塞，立刻返回
+    ret = pthread_join(thread, NULL);
+
+    if(ret != 0)
+    {
+        printf("pthread_join error [%s]\n", strerror(ret));
+    }
+
+    //目的是为了让子线程能够执行起来
+    sleep(1);
+    
+    //主线程退出，不影响到子线程
+    pthread_exit(NULL);
     return 0;
 }
