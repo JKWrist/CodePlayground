@@ -15,7 +15,7 @@ again:
         //man accept 可以得到如下错误
         if ((ECONNABORTED == errno) || (EINTR == errno))
         {
-            go again;
+            goto again;
         }
         else
         {
@@ -50,7 +50,7 @@ int Listen(int fd, int backlog)
     int n;
     if((n = listen(fd, backlog)) < 0)
     {
-        perr_exit(n);
+        perr_exit("listen");
     }
     return n;
 }
@@ -60,7 +60,7 @@ int Socket(int family, int type, int protocol)
     int n;
     if((n = socket(family, type, protocol)) < 0)
     {
-        perr_exit(n);
+        perr_exit("socket");
     }
     return n;
 }
@@ -83,7 +83,7 @@ again:
     return n;
 }
 
-ssize_t Write(int fd, const void *ptr, ssize_t ntypes)
+ssize_t Write(int fd, const void *ptr, ssize_t nbytes)
 {
     ssize_t n;
 again:
@@ -98,7 +98,7 @@ again:
             return -1;
         }
     }
-    retrun n;
+    return n;
 }
 
 int Colse(int fd)
@@ -155,7 +155,7 @@ ssize_t Writen(int fd, const void *vptr, size_t n)
     nleft = n;
     while (nleft > 0)
     {
-        if((nwrite = write(fd, ptr, nleft) < 0)
+        if((nwrite = write(fd, ptr, nleft)) < 0)
         {
             if(EINTR == errno)
             {
@@ -172,42 +172,79 @@ ssize_t Writen(int fd, const void *vptr, size_t n)
     
 }
 
-static ssize_t my_read(int fd, char *ptr)
+//static 
+ssize_t my_read(int fd, char *ptr)
 {
-    static int read_cnt = 0;
-    static char * read_ptr = NULL;
-    static char read_buf[100] = {0};
+    static int read_cnt;
+    static char *read_ptr;
+    static char read_buf[100];
 
-    if(read_cnt <= 0)
+    if (read_cnt <= 0)
     {
     again:
-        if(read_cnt = read(fd, read_buf, sizeof(read_buf)) < 0)
+        if ((read_cnt = read(fd, read_buf, sizeof(read_buf))) < 0)
         {
-            if(EINTR == errno)
-            {
+            if (errno == EINTR)
                 goto again;
-            }
-            else
-            {
-                return -1;
-            }
+            return -1;
         }
         else if (read_cnt == 0)
-        {
             return 0;
-        }
         read_ptr = read_buf;
     }
     read_cnt--;
     *ptr = *read_ptr++;
+
+    return 1;
 }
 
-ssize_t Readline(int fd, char *vptr, size_t maxlen)
+ssize_t Readline(int fd, void *vptr, size_t maxlen)
 {
+    ssize_t n, rc;
+    char c, *ptr;
 
+    ptr = vptr;
+    for (n = 1; n < maxlen; n++)
+    {
+        if ((rc = my_read(fd, &c)) == 1)
+        {
+            *ptr++ = c;
+            if (c == '\n')
+                break;
+        }
+        else if (rc == 0)
+        {
+            *ptr = 0;
+            return n - 1;
+        }
+        else
+            return -1;
+    }
+    *ptr = 0;
+
+    return n;
 }
 
 int tcp4bind(short port, const char *IP)
 {
-
+    struct sockaddr_in serv_addr;
+    int lfd = Socket(AF_INET, SOCK_STREAM, 0);
+    bzero(&serv_addr, sizeof(serv_addr));
+    if (IP == NULL)
+    {
+        //如果这样使用 0.0.0.0,任意ip将可以连接
+        serv_addr.sin_addr.s_addr = INADDR_ANY;
+    }
+    else
+    {
+        if (inet_pton(AF_INET, IP, &serv_addr.sin_addr.s_addr) <= 0)
+        {
+            perror(IP); //转换失败
+            exit(1);
+        }
+    }
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(port);
+    Bind(lfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
+    return lfd;
 }
