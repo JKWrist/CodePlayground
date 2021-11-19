@@ -115,7 +115,7 @@ int Colse(int fd)
 ssize_t Readn(int fd, void *vptr, size_t n)
 {
     size_t nleft; //unsigned int 剩余未读取字节数
-    ssize_t read; //int 实际读到的字节数
+    ssize_t nread; //int 实际读到的字节数
     char * ptr;
 
     ptr = vptr;
@@ -140,19 +140,66 @@ ssize_t Readn(int fd, void *vptr, size_t n)
         }
         
         nleft -= nread;
-        pt
+        ptr += nread;
     }
-    
+    return n - nleft;
 }
 
 ssize_t Writen(int fd, const void *vptr, size_t n)
 {
+    size_t nleft;
+    ssize_t nwrite;
+    char * ptr;
 
+    ptr = vptr;
+    nleft = n;
+    while (nleft > 0)
+    {
+        if((nwrite = write(fd, ptr, nleft) < 0)
+        {
+            if(EINTR == errno)
+            {
+                nwrite = 0;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        nleft -= nwrite;
+        ptr += nwrite;
+    }
+    
 }
 
-ssize_t my_read(int fd, char *ptr)
+static ssize_t my_read(int fd, char *ptr)
 {
+    static int read_cnt = 0;
+    static char * read_ptr = NULL;
+    static char read_buf[100] = {0};
 
+    if(read_cnt <= 0)
+    {
+    again:
+        if(read_cnt = read(fd, read_buf, sizeof(read_buf)) < 0)
+        {
+            if(EINTR == errno)
+            {
+                goto again;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        else if (read_cnt == 0)
+        {
+            return 0;
+        }
+        read_ptr = read_buf;
+    }
+    read_cnt--;
+    *ptr = *read_ptr++;
 }
 
 ssize_t Readline(int fd, char *vptr, size_t maxlen)
