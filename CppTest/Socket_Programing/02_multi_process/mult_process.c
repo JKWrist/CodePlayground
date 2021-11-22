@@ -13,7 +13,8 @@
 ******************************************************************/
 int main()
 {
-    int lfd = tcp4bind(8888, NULL);
+    int lfd = tcp4bind(8889, NULL);
+    printf("111 lfd %d\n", lfd);
     Listen(lfd, 256);
 
     pid_t pid;
@@ -29,6 +30,8 @@ int main()
         len = sizeof(client);
         memset(sIP, 0x00, sizeof(sIP));
         cfd = Accept(lfd, (struct sockaddr *)&client, &len);
+        printf("222 cfd %d\n", cfd);
+        printf("222 lfd %d\n", lfd);
 
         printf("client:[%s] [%d]\n", inet_ntop(AF_INET, &client.sin_addr.s_addr, sIP, sizeof(sIP)),\
                ntohs(client.sin_port));
@@ -46,25 +49,35 @@ int main()
             close(lfd);
 
             int i = 0;
-            int n = 0;
+            int n;
             char buf[1024] = {0};
+            printf("333 i %d\n", i);
             while (1)
             {
+                printf("444 i %d\n", i);
+                printf("444 cfd %d\n", cfd);
+                memset(buf, 0, sizeof(buf));
+
                 //读数据
-                n = Read(cfd, buf, sizeof(buf));
+                n = read(cfd, buf, sizeof(buf));
+
+                printf("n %d\n", n);
+
                 if (n <= 0)
                 {
-                    printf("read error or client closed, n == [%d]\n", n);
+                    printf("read error or client closed, n = [%d]\n", n);
                     break;
                 }
-                printf("pid[%d] port:[%d] ---->n:[%d], buf:[%s]\n", getpid(), ntohs(client.sin_port), n, buf);
+                printf("pid[%d] port:[%d], readn:[%d], buf:[%s]\n", getpid(), ntohs(client.sin_port), n, buf);
 
                 //将小写转换为大写
                 for (int i = 0; i < n; i++)
                 {
-                   buf[i] = toupper(buf[i]);
+                    printf("555 i %d\n", i);
+                    buf[i] = toupper(buf[i]);
                 }
 
+                printf("666 i %d\n", i);
                 //发送数据
                 Write(cfd, buf, n);
             }
