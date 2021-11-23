@@ -1,4 +1,11 @@
-#include "wrap.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <strings.h>
 
 void perr_exit(const char *s)
 {
@@ -9,98 +16,84 @@ void perr_exit(const char *s)
 int Accept(int fd, struct sockaddr *sa, socklen_t *salenptr)
 {
     int n;
-again:
-    if((n == accept(fd, sa, salenptr)) < 0)
-    {
-        printf("accept return %d\n", n);
 
-        //man accept 可以得到如下错误
-        if ((ECONNABORTED == errno) || (EINTR == errno))
-        {
+again:
+    if ((n = accept(fd, sa, salenptr)) < 0)
+    {
+        if ((errno == ECONNABORTED) || (errno == EINTR))
             goto again;
-        }
         else
-        {
             perr_exit("accept error");
-        }
     }
-    printf("accept return %d\n", n);
-    printf("%s\n", strerror(errno));
     return n;
 }
 
 int Bind(int fd, const struct sockaddr *sa, socklen_t salen)
 {
     int n;
-    if((n = bind(fd, sa, salen)) < 0)
-    {
+
+    if ((n = bind(fd, sa, salen)) < 0)
         perr_exit("bind error");
-    }
+
     return n;
 }
 
 int Connect(int fd, const struct sockaddr *sa, socklen_t salen)
 {
     int n;
-    if((n = connect(fd, sa, salen)) < 0)
-    {
+
+    if ((n = connect(fd, sa, salen)) < 0)
         perr_exit("connect error");
-    }
+
     return n;
 }
 
 int Listen(int fd, int backlog)
 {
     int n;
-    if((n = listen(fd, backlog)) < 0)
-    {
-        perr_exit("listen");
-    }
+
+    if ((n = listen(fd, backlog)) < 0)
+        perr_exit("listen error");
+
     return n;
 }
 
 int Socket(int family, int type, int protocol)
 {
     int n;
-    if((n = socket(family, type, protocol)) < 0)
+
+    if ((n = socket(family, type, protocol)) < 0)
+        perr_exit("socket error");
+
+    return n;
+}
+
+ssize_t Read(int fd, void *ptr, size_t nbytes)
+{
+    ssize_t n;
+
+again:
+    if ((n = read(fd, ptr, nbytes)) == -1)
     {
-        perr_exit("socket");
+        if (errno == EINTR)
+            goto again;
+        else
+            return -1;
     }
     return n;
 }
 
-ssize_t Read(int fd, void *ptr, ssize_t nbytes)
+ssize_t Write(int fd, const void *ptr, size_t nbytes)
 {
     ssize_t n;
-again:
-    if((n = read(fd, ptr, nbytes)) == -1)
-    {
-        if(EINTR == errno)
-        {
-            goto again;
-        }
-        else
-        {
-            return -1;
-        }
-    }
-    return n;
-}
 
-ssize_t Write(int fd, const void *ptr, ssize_t nbytes)
-{
-    ssize_t n;
 again:
-    if((n = write(fd, ptr, nbytes)) == -1)
+    if ((n = write(fd, ptr, nbytes)) == -1)
     {
-        if(EINTR == errno)
-        {
+        if (errno == EINTR)
             goto again;
-        }
         else
-        {
             return -1;
-        }
     }
     return n;
 }
@@ -108,41 +101,34 @@ again:
 int Close(int fd)
 {
     int n;
-    if((n == close(fd)) == -1)
-    {
+    if ((n = close(fd)) == -1)
         perr_exit("close error");
-    }
+
     return n;
 }
 
-/*参数：应该读取的字节数*/
+/*参三: 应该读取的字节数*/
 ssize_t Readn(int fd, void *vptr, size_t n)
 {
-    size_t nleft; //unsigned int 剩余未读取字节数
+    size_t nleft;  //usigned int 剩余未读取的字节数
     ssize_t nread; //int 实际读到的字节数
-    char * ptr;
+    char *ptr;
 
     ptr = vptr;
     nleft = n;
 
     while (nleft > 0)
     {
-        if((nread = read(fd, ptr, nleft)) < 0)
+        if ((nread = read(fd, ptr, nleft)) < 0)
         {
-            if(EINTR == errno)
-            {
+            if (errno == EINTR)
                 nread = 0;
-            }
             else
-            {
                 return -1;
-            }
         }
-        else if(0 == nread)
-        {
+        else if (nread == 0)
             break;
-        }
-        
+
         nleft -= nread;
         ptr += nread;
     }
@@ -152,32 +138,28 @@ ssize_t Readn(int fd, void *vptr, size_t n)
 ssize_t Writen(int fd, const void *vptr, size_t n)
 {
     size_t nleft;
-    ssize_t nwrite;
-    char * ptr;
+    ssize_t nwritten;
+    const char *ptr;
 
     ptr = vptr;
     nleft = n;
     while (nleft > 0)
     {
-        if((nwrite = write(fd, ptr, nleft)) < 0)
+        if ((nwritten = write(fd, ptr, nleft)) <= 0)
         {
-            if(EINTR == errno)
-            {
-                nwrite = 0;
-            }
+            if (nwritten < 0 && errno == EINTR)
+                nwritten = 0;
             else
-            {
                 return -1;
-            }
         }
-        nleft -= nwrite;
-        ptr += nwrite;
+
+        nleft -= nwritten;
+        ptr += nwritten;
     }
-    
+    return n;
 }
 
-//static 
-ssize_t my_read(int fd, char *ptr)
+static ssize_t my_read(int fd, char *ptr)
 {
     static int read_cnt;
     static char *read_ptr;
@@ -233,8 +215,6 @@ int tcp4bind(short port, const char *IP)
 {
     struct sockaddr_in serv_addr;
     int lfd = Socket(AF_INET, SOCK_STREAM, 0);
-    printf("Socket lfd %d\n", lfd);
-
     bzero(&serv_addr, sizeof(serv_addr));
     if (IP == NULL)
     {
