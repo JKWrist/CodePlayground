@@ -12,6 +12,8 @@ int Accept(int fd, struct sockaddr *sa, socklen_t *salenptr)
 again:
     if((n == accept(fd, sa, salenptr)) < 0)
     {
+        printf("accept return %d\n", n);
+
         //man accept 可以得到如下错误
         if ((ECONNABORTED == errno) || (EINTR == errno))
         {
@@ -22,6 +24,8 @@ again:
             perr_exit("accept error");
         }
     }
+    printf("accept return %d\n", n);
+    printf("%s\n", strerror(errno));
     return n;
 }
 
