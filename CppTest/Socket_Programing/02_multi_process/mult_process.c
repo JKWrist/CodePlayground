@@ -13,8 +13,32 @@
 ******************************************************************/
 int main()
 {
-    int lfd = tcp4bind(8889, NULL);
-    printf("111 lfd %d\n", lfd);
+    struct sockaddr_in serv_addr;
+    int lfd = Socket(AF_INET, SOCK_STREAM, 0);
+    printf("Socket lfd %d\n", lfd);
+
+    bzero(&serv_addr, sizeof(serv_addr));
+    // if (IP == NULL)
+    // {
+        //如果这样使用 0.0.0.0,任意ip将可以连接
+        serv_addr.sin_addr.s_addr = INADDR_ANY;
+    // }
+    // else
+    // {
+    //     if (inet_pton(AF_INET, IP, &serv_addr.sin_addr.s_addr) <= 0)
+    //     {
+    //         perror(IP); //转换失败
+    //         exit(1);
+    //     }
+    // }
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(8888);
+    int ret = Bind(lfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
+    if(ret != 0)
+    {
+        printf("bind error\n");
+    }
+    
     Listen(lfd, 256);
 
     pid_t pid;
