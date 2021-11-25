@@ -3,7 +3,7 @@
 all: mult_thread_server.out 
 
 mult_thread_server.out:mult_thread.c
-	gcc mult_thread.c -o server.out -lphread
+	gcc mult_thread.c -o server.out -lpthread
 
 clean:
 	rm *.out
