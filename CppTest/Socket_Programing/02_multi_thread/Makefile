@@ -1,8 +1,8 @@
 .PHONY:all clean
 
-all: mult_thread_server.out 
+all: server.out 
 
-mult_thread_server.out:mult_thread.c
+server.out:mult_thread.c
 	gcc mult_thread.c -o server.out -lpthread
 
 clean:
