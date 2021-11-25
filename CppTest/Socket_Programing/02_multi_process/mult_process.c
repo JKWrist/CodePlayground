@@ -1,7 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "wrap.h"
+#include <unistd.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <ctype.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
 
 /****************************************************************
  *  函数名称：main
@@ -14,8 +21,8 @@
 int main()
 {
     struct sockaddr_in serv_addr;
-    int lfd = Socket(AF_INET, SOCK_STREAM, 0);
-    printf("Socket lfd %d\n", lfd);
+    int lfd = socket(AF_INET, SOCK_STREAM, 0);
+    printf("socket lfd %d\n", lfd);
 
     bzero(&serv_addr, sizeof(serv_addr));
     // if (IP == NULL)
@@ -33,13 +40,13 @@ int main()
     // }
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(8888);
-    int ret = Bind(lfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
+    int ret = bind(lfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
     if(ret != 0)
     {
         printf("bind error\n");
     }
     
-    Listen(lfd, 256);
+    listen(lfd, 256);
 
     pid_t pid;
     int cfd;
@@ -53,9 +60,8 @@ int main()
         //接受新的连接
         len = sizeof(client);
         memset(sIP, 0x00, sizeof(sIP));
-        cfd = Accept(lfd, (struct sockaddr *)&client, &len);
-        printf("222 cfd %d\n", cfd);
-        printf("222 lfd %d\n", lfd);
+        cfd = accept(lfd, (struct sockaddr *)&client, &len);
+        printf("accept  %d\n", cfd);
 
         printf("client:[%s] [%d]\n", inet_ntop(AF_INET, &client.sin_addr.s_addr, sIP, sizeof(sIP)),\
                ntohs(client.sin_port));
@@ -75,18 +81,12 @@ int main()
             int i = 0;
             int n;
             char buf[1024] = {0};
-            printf("333 i %d\n", i);
             while (1)
             {
-                printf("444 i %d\n", i);
-                printf("444 cfd %d\n", cfd);
                 memset(buf, 0, sizeof(buf));
 
                 //读数据
                 n = read(cfd, buf, sizeof(buf));
-
-                printf("n %d\n", n);
-
                 if (n <= 0)
                 {
                     printf("read error or client closed, n = [%d]\n", n);
@@ -97,13 +97,11 @@ int main()
                 //将小写转换为大写
                 for (int i = 0; i < n; i++)
                 {
-                    printf("555 i %d\n", i);
                     buf[i] = toupper(buf[i]);
                 }
 
-                printf("666 i %d\n", i);
                 //发送数据
-                Write(cfd, buf, n);
+                write(cfd, buf, n);
             }
             
             //关闭cfd

@@ -29,6 +29,7 @@ int main()
     bzero(&serv, sizeof(serv));
     serv.sin_family = AF_INET;
     serv.sin_port = htons(8888);
+    
     //本地任意可用IP
     serv.sin_addr.s_addr = htonl(INADDR_ANY);
     int ret = bind(lfd, (struct sockaddr *)&serv, sizeof(serv));
@@ -43,6 +44,8 @@ int main()
     struct sockaddr_in client;
     socklen_t len = sizeof(client);
     int cfd = accept(lfd, (struct sockaddr *)&client, &len);
+
+    printf("accept %d\n", cfd);
 
     // const char *
     // inet_ntop(int af, const void *restrict src, char *restrict dst,
