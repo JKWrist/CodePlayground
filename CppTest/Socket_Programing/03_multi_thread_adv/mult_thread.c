@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h> //read
+
 #include <string.h>
 #include <strings.h> // bzero
 #include <arpa/inet.h> //htonl htons
+
 
 typedef struct info
 {
@@ -43,6 +47,28 @@ int find_Index()
 //线程执行函数
 void * thread_work(void * arg)
 {
+    INFO *p = (INFO *)arg;
+    printf("idx = [%d]\n", p->idx);
+
+    char sIP[16] = {0};
+    memset(sIP, 0, sizeof(sIP));
+    printf("new client:[%s][%d]\n", inet_ntop(AF_INET, &(p->client.sin_addr.s_addr), sIP, sizeof(sIP))
+                                                         htons(p->client.sin_port));
+
+    int n;
+    int cfd = p->cfd;
+    char buf[1024] = {0};
+
+    while (1)
+    {
+        memset(buf, 0, sizeof(buf));
+        //读数据
+        n = read(cfd, buf, sizeof(buf));
+        if(n <= 0)
+        {
+            
+        }
+    }
     
 }
 
@@ -80,6 +106,47 @@ int main()
     //初始化
     init_thread_INFO();
 
+    int cfd;
+    int ret;
+    int idx;
+    socklen_t len;
+    pthread_t thread;
+    struct sockaddr_in client;
+
+    while (1)
+    {
+        len = sizeof(client);
+        bzero(&client, len);
+        //获得一个新的连接
+        cfd = accept(lfd, (struct sockaddr *)&client, &len);
+
+        //创建一个子进程，让子进程处理连接---收发数据
+        //找数组中空闲的位置
+        idx = find_Index();
+        if(-1 == idx)
+        {
+            close(cfd);
+            continue;
+        }
+
+        //对空闲位置的元素成员赋值
+        thread_INFO[idx].cfd = cfd;
+        thread_INFO[idx].idx = idx;
+        memcpy(&thread_INFO[idx].client, &client, sizeof(client));
+
+        //创建时子线程--该子线程完成对数据的收发
+        ret = pthread_create(&thread_INFO[idx].thread, NULL, thread_work, &thread_INFO[idx]);
+        if (0 != ret)
+        {
+            printf("create thread error:[%s]\n", sterror(ret));
+            exit(-1);
+        }
+
+        //设置子线程为分离属性
+        pthread_detach(thread_INFO[idx].thread);
+    }
+
+    close(lfd);
 
     return 0;
 }
