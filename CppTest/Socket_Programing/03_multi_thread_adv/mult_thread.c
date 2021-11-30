@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h> //read
-
+#include <ctype.h>
 #include <string.h>
 #include <strings.h> // bzero
 #include <arpa/inet.h> //htonl htons
@@ -29,7 +29,9 @@ init_thread_INFO()
 
 int find_Index()
 {
-    for (int i = 0; i < 1024; i++)
+    int i = 0; 
+    
+    for (; i < 1024; i++)
     {
         if (-1 == thread_INFO[i].cfd)
         {
@@ -52,8 +54,8 @@ void * thread_work(void * arg)
 
     char sIP[16] = {0};
     memset(sIP, 0, sizeof(sIP));
-    printf("new client:[%s][%d]\n", inet_ntop(AF_INET, &(p->client.sin_addr.s_addr), sIP, sizeof(sIP))
-                                                         htons(p->client.sin_port));
+    printf("new client:[%s][%d]\n", \
+    inet_ntop(AF_INET, &(p->client.sin_addr.s_addr), sIP, sizeof(sIP)), htons(p->client.sin_port));
 
     int n;
     int cfd = p->cfd;
@@ -66,8 +68,17 @@ void * thread_work(void * arg)
         n = read(cfd, buf, sizeof(buf));
         if(n <= 0)
         {
-            
+            printf("read error or client closed n = %d\n", n);
+            close(cfd);
+            p->cfd = -1;
+            pthread_exit(NULL);
         }
+
+        for (int i = 0; i < n; i++)
+        {
+            buf[i] = toupper(buf[i]);
+        }
+        write(cfd, buf, sizeof(buf));
     }
     
 }
@@ -89,7 +100,7 @@ int main()
 
     //设置端口复用
     int opt = 1;
-    setsockopt(lfd, SOL_SOCKET, SO_REUSERADDR, &opt, sizeof(int));
+    setsockopt(lfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int));
 
     //绑定--将lfd和IP PORT绑定
     struct sockaddr_in serv;
@@ -138,7 +149,7 @@ int main()
         ret = pthread_create(&thread_INFO[idx].thread, NULL, thread_work, &thread_INFO[idx]);
         if (0 != ret)
         {
-            printf("create thread error:[%s]\n", sterror(ret));
+            printf("create thread error:[%s]\n", strerror(ret));
             exit(-1);
         }
 
