@@ -58,13 +58,13 @@ void test02()
             }
         }
     }
-
+    printf("LINE %s\n", LINE);
     (endPos) = ftell(fp);
-    int len = strlen("------WebKitFormBoundaryp8hBm8LITdkY6xVW");
+    int len = strlen(LINE);
     printf("len %d\n", len);
     printf("2222222222 %d\n", endPos);
     // end = readpos - bondary -\r\n
-    printf("2222222222 endPos - len %d\n", endPos - len -2);
+    printf("2222222222 endPos - len -2 %d\n", endPos - len -2);
 
     char ch = fgetc(fp);
 
