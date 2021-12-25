@@ -1,4 +1,6 @@
 //简易版线程池
+
+//存在Segmentation fault: 11问题，后面定位具体原因
 #include "05_threadpool_simple.h"
 
 ThreadPool *thrPool = NULL;
@@ -8,7 +10,7 @@ int beginnum = 1000;
 void *thrRun(void *arg)
 {
     printf("begin call %s -----\n", __FUNCTION__);
-    ThreadPoll *pool = (ThreadPool *)arg;
+    ThreadPool *pool = (ThreadPool *)arg;
     int taskpos = 0; //任务位置
     PoolTask *task = (PoolTask *)malloc(sizeof(PoolTask));
 
@@ -18,10 +20,10 @@ void *thrRun(void *arg)
         pthread_mutex_lock(&thrPool->pool_lock);
 
         //无任务并且线程池不是要摧毁
-        while (thrPool->job_num < 0 && !thrPool->shudown)
+        while (thrPool->job_num < 0 && !thrPool->shut_down)
         {
             //如果没有任务，线程会阻塞
-            pthread_cond_wait(&thrPool->not_empty_task, &thrPoll->pool_lock);
+            pthread_cond_wait(&thrPool->not_empty_task, &thrPool->pool_lock);
         }
 
         if (thrPool->job_num)
@@ -38,15 +40,15 @@ void *thrRun(void *arg)
             pthread_cond_signal(&thrPool->empty_task);
         }
 
-        if (thrPool->shutdown)
+        if (thrPool->shut_down)
         {
             //代表要摧毁线程池, 此时线程池退出即可
-            pthread_mutex_unloick(&thrPool->pool_lock);
+            pthread_mutex_unlock(&thrPool->pool_lock);
             free(task);
             pthread_exit(NULL);
         }
 
-        pthread_mutex_unloick(&thrPool->pool_lock);
+        pthread_mutex_unlock(&thrPool->pool_lock);
         task->task_func(task->arg); //执行回调函数
     }
 
@@ -58,22 +60,22 @@ void create_threadpool(int thrnum, int maxtasknum)
 {
     printf("begin call %s -----\n", __FUNCTION__);
 
-    thrPool = (ThreadPoll *)malloc(sizeof(ThreadPoll));
+    thrPool = (ThreadPool *)malloc(sizeof(ThreadPool));
 
     thrPool->thr_num = thrnum;
     thrPool->max_job_num = maxtasknum;
-    thrPool->shutdown = 0; //是否摧毁线程池，1代表摧毁
+    thrPool->shut_down = 0; //是否摧毁线程池，1代表摧毁
     thrPool->job_push = 0; //任务队列添加的位置
     thrPool->job_pop = 0;  //任务队列出队的位置
     thrPool->job_num = 0;  //初始化的任务个数为0
 
     //申请的最大的任务队列
-    thrPool->task = (PoolTask *)malloc(sizeof(PoolTask) * maxtasknum);
+    thrPool->tasks = (PoolTask *)malloc(sizeof(PoolTask) * maxtasknum);
 
     //初始化锁和条件变量
-    pthread_mutex_init(&thrPool->poool_lock, NULL);
-    pthread_cond_init(&thread->empty_task, NULL);
-    pthread_cond_init(&thread->not_empty_task, NULL);
+    pthread_mutex_init(&thrPool->pool_lock, NULL);
+    pthread_cond_init(&thrPool->empty_task, NULL);
+    pthread_cond_init(&thrPool->not_empty_task, NULL);
 
     int i = 0;
     //申请n个线程id的空间
@@ -111,13 +113,13 @@ void addtask(ThreadPool *pool)
     }
 
     int taskpos = (pool->job_push++) % pool->max_job_num;
-    printf("add task %d tasknum == %d\n", task, beginnum);
+    printf("add task %d tasknum == %d\n", taskpos, beginnum);
     pool->tasks[taskpos].tasknum = beginnum++;
     pool->tasks[taskpos].arg = (void *)&pool->tasks[taskpos];
     pool->tasks[taskpos].task_func = taskRun;
     pool->job_num++;
 
-    pthread_mutex_unloick(&pool->pool_lock);
+    pthread_mutex_unlock(&pool->pool_lock);
 
     pthread_cond_signal(&pool->not_empty_task); //通知工作线程
     printf("end call %s -------\n", __FUNCTION__);
@@ -147,5 +149,5 @@ int main()
     sleep(20);
     destory_threadpool(thrPool);
 
-    return;
+    return 0;
 }

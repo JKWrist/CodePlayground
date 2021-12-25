@@ -29,7 +29,7 @@ typedef struct _ThreadPool
     pthread_mutex_t pool_lock;     //线程池的锁
     pthread_cond_t empty_task;     //任务队列为空的条件
     pthread_cond_t not_empty_task; //任务队列不为空的条件
-} ThreadPoll;
+} ThreadPool;
 
 //创建线程池--thrnum 线程个数，maxtasknum 最大任务数
 void create_threadpool(int thrnum, int maxtasknum);
@@ -43,4 +43,4 @@ void addtask(ThreadPool * pool);
 //任务回调函数
 void taskRun(void * arg);
 
-#define __THREADPOOL_H__
+#endif //__THREADPOOL_H__
