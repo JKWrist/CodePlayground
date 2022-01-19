@@ -1,4 +1,5 @@
 #include <sys/time.h>
+#include <stdio.h>
 void f()
 {
 	for(int i = 0; i < 400000000; i++)
