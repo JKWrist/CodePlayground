@@ -2,34 +2,34 @@
 
 void test01()
 {
-  int len;
-  int a[len];
+	int len;
+	int a[len];
 }
 
 void test02()
 {
-  int buffer[0];
-  printf("%lu\n", sizeof(buffer));
+	int buffer[0];
+	printf("%lu\n", sizeof(buffer));
 }
 
 void test03()
 {
-  struct stu
-  {
-    int len;
-    char buffer[0];
-  };
+	struct stu
+	{
+		int len;
+		char buffer[0];
+	};
 
-  printf("%lu\n", sizeof(struct stu));
+	printf("%lu\n", sizeof(struct stu));
 
 }
 
 int main()
 {
-  test01();
-  test02();
-  
-  test03();
+	test01();
+	test02();
+	
+	test03();
 }
 
 
