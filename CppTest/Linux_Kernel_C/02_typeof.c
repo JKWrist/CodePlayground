@@ -96,8 +96,8 @@ void test04()
 {
 	int a = 4;
 	float b = 5.6;
-	int c = max(a, b);
-	printf("%d\n", c);
+	float c = max(a, b);
+	printf("%f\n", c);
 	printf("---------------------------\n");
 }
 

@@ -73,6 +73,9 @@ void test03()
 	printf("&sex = %p\n", &((struct student *)0)->sex);
 	printf("&sex = %d\n", &((struct student *)0)->sex);
 	printf("---------------------------\n");
+
+	int * p = NULL;
+	printf("%d\n", *p);
 }
 
 int main()
