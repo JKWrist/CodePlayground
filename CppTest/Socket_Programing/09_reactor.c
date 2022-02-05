@@ -42,6 +42,7 @@ void eventadd(int fd, int events, void * arg, void (*call_back)(int , int , void
 {
 	printf("begin call : %s fd : %d\n", __FUNCTION__, fd);
 
+	//填充事件驱动的全局数组
 	ev->fd = fd;
 	ev->events = events;
 	//ev->arg = arg; 代表结构体自己，可以通过arg得到结构体的所有信息
@@ -65,6 +66,7 @@ void eventset(int fd, int events, void * arg, void (*call_back)(int, int, void *
 {
 	printf("begin call %s\n", __FUNCTION__);
 
+	//填充事件驱动的全局数组
 	ev->fd = fd;
 	ev->events = events;
 	//ev->arg = arg;
@@ -88,7 +90,7 @@ void eventdel(xevent * ev, int fd, int events)
 {
 	printf("begin call%s\n", __FUNCTION__);
 
-	//对于一个事件驱动结构体进行清空
+	//填充事件驱动的全局数组
 	ev->fd = 0;
 	ev->events = 0;
 	//ev->arg = NULL;
@@ -193,6 +195,7 @@ int main()
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_port = htons(8888);
 	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	bind(lfd, (struct sockaddr *)&servaddr, sizeof(servaddr));
 
 	//监听
 	listen(lfd, 128);
