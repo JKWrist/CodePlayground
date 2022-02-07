@@ -1,0 +1,3 @@
+#变量 强符号 弱符号
+all:
+	gcc 01_func.c 01_main.c
