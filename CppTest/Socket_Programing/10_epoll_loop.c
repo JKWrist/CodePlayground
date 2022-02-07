@@ -351,7 +351,7 @@ int main()
 			//使用自定义结构体myevent_s类型指针，接收联合体data的void * ptr成员
 			struct myevent_s *ev = (struct myevent_s *)events[i].data.ptr;
 
-			//读就绪事件
+			//读就绪事件, 对于监听事件和读取数据来说都是读事件
 			if((events[i].events & EPOLLIN) && (ev->events & EPOLLIN))
 			{
 				//void (*call_back)(int fd, int events, void * arg);
