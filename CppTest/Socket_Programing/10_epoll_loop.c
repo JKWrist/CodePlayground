@@ -45,6 +45,8 @@ struct myevent_s g_events[MAX_EVENTS + 1]; 				//事件驱动结构体数组，+
 ******************************************************************/
 void eventset(struct myevent_s *ev, int fd, void (*call_back)(int , int , void *), void * arg)
 {
+	printf("begin call %s\n", __FUNCTION__);
+
 	ev->fd = fd;
 	ev->events = 0;
 	ev->arg = arg;
@@ -63,6 +65,8 @@ void eventset(struct myevent_s *ev, int fd, void (*call_back)(int , int , void *
 ******************************************************************/
 void eventadd(int efd, int events, struct myevent_s * ev)
 {
+	printf("begin call %s\n", __FUNCTION__);
+
 	//修改事件驱动结构体
 	ev->events = events;
 
@@ -88,7 +92,7 @@ void eventadd(int efd, int events, struct myevent_s * ev)
 	}
 	else
 	{
-		printf("event add OK [fd = %d], op = [%d], events [%d]", ev->fd, op, events);
+		printf("event add OK [fd = %d], op = [%d], events [%d]\n", ev->fd, op, events);
 	}
 }
 
@@ -102,6 +106,8 @@ void eventadd(int efd, int events, struct myevent_s * ev)
 ******************************************************************/
 void eventdel(int efd, struct myevent_s * ev)
 {
+	printf("begin call %s\n", __FUNCTION__);
+
 	struct epoll_event epv = {0, {0}};
 	if(ev->status != 1)								//不在红黑树上
 	{
@@ -126,6 +132,8 @@ void eventdel(int efd, struct myevent_s * ev)
 ******************************************************************/
 void acceptConn(int lfd, int events, void * arg)
 {
+	printf("begin call %s\n", __FUNCTION__);
+
 	struct sockaddr_in cin;
 	socklen_t len = sizeof(cin);
 	int cfd = accept(lfd, (struct sockaddr *)&cin, &len);
@@ -183,6 +191,8 @@ void acceptConn(int lfd, int events, void * arg)
 ******************************************************************/
 void recvData(int fd, int events, void * arg)
 {
+	printf("begin call %s\n", __FUNCTION__);
+
 	int len;
 	struct myevent_s *ev = (struct myevent_s *)arg;
 
@@ -224,6 +234,8 @@ void recvData(int fd, int events, void * arg)
 ******************************************************************/
 void sendData(int fd, int events, void * arg)
 {
+	printf("begin call %s\n", __FUNCTION__);
+
 	int len;
 	struct myevent_s *ev = (struct myevent_s *)arg;
 
@@ -255,6 +267,8 @@ void sendData(int fd, int events, void * arg)
 ******************************************************************/
 void initListenSocket()
 {
+	printf("begin call %s\n", __FUNCTION__);
+
 	//创建socket
 	g_lfd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -323,6 +337,8 @@ int main()
 
 		//监听红黑树g_efd，将满足的时间的文件描述符添加到events数组中， 1秒没有时间满足，返回0
 		int nfd = epoll_wait(g_efd, events, MAX_EVENTS, 1000);
+		
+		printf("epoll_wait return %d\n", nfd);
 
 		if(nfd < 0)
 		{
