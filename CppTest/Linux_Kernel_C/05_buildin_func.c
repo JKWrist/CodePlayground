@@ -113,8 +113,29 @@ void test04()
 		printf("not const int\n");
 	}
 
-	char * pstr = "你好 世界";
-	if(__builtin_constant_p(a))
+	//1
+	char * pstr = "你好 世界0";
+
+	//2
+	char const * pstr1 = "你好 世界1";
+
+	pstr1 = pstr;
+
+	//3
+	const char  * pstr2 = "你好 世界2";
+
+
+	//4
+	char str[10] = "abcdefg";
+	char * const pstr3 = str;
+	
+	//pstr3 = pstr;
+
+	pstr3[0] = 'p';
+	printf("222222  %s\n", pstr3);
+
+
+	if(__builtin_constant_p(pstr1))
 	{
 		printf("const str\n");
 	}
@@ -148,10 +169,10 @@ void test05()
 int main()
 {
 	//test01();
-	test02();
-	test03();
+	//test02();
+	//test03();
 	test04();
-	test05();
+	//test05();
 
 
 	return 0;

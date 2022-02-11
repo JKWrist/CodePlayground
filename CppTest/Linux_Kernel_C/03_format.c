@@ -43,7 +43,7 @@ void __attribute__((format(printf,1,2))) test02(char *fmt,...)
  *  创建日期：2022-02-07 16:13:57
  *  作者：xujunze
  *  输入参数：无
- *  输出参数：无
+ *  输出参数：无    ""
  *  返回值：无
 ******************************************************************/
 #define DEBUG //打印开关
@@ -126,9 +126,9 @@ int main(void)
     int num = 1;
     test01("I am %s, I have %d dream\n", "小红", num);
 
-	test02("I am %s, I have %d dream\n", "小白", num);
+	//test02("I am %s, I have %d dream\n", "小白", num);
 
-	LOG("I am %s, I have %d dream\n", "小绿", num);
+	//LOG("I am %s, I have %d dream\n", "小绿", num);
 
     return 0;
 }

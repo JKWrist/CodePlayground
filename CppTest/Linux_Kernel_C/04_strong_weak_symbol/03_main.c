@@ -9,5 +9,6 @@ void func(void)
 
 int main()
 {
+	func();
 	printf("%s %s : a = %d\n", __FILE__, __FUNCTION__, a);
 }
