@@ -1,0 +1,47 @@
+{
+	"device_name": "234234",
+	"ip_addr": "192.168.10.1",
+	"mac_address": "000e1f84933b",
+	"lan_port_info": [
+		{
+			"Non_1905_neighbour_mac_address": "4ccc6ac1298f"
+		}
+	],
+	"station_info": [
+		{
+			"station_mac": "72a2628a9f1e",
+			"station_rssi": "80",
+			"station_connected_band": "5G",
+			"station_downlink": "961",
+			"station_uplink": "432",
+			"bss_transition_support": "1"
+		}
+	],
+	"neighbor_devices": [
+		{
+			"neighbor_mac": "202211191020",
+			"neighbor_name": "yuan",
+			"neighbor_rssi": "-1",
+			"neighbor_band": "ETH"
+		}
+	],
+	"child_devices": [
+		{
+			"device_name": "yuan",
+			"manufacturer": "Realtek",
+			"model_name": "RTL8198D",
+			"ip_addr": "192.168.10.5",
+			"mac_address": "202211191020",
+			"child_rssi": "-1",
+			"child_band": "ETH",
+			"lan_port_info": [
+				{
+					"Non_1905_neighbour_mac_address": "507b9dbf484b"
+				}
+			],
+			"station_info": [],
+			"neighbor_devices": [],
+			"child_devices": []
+		}
+	]
+}
