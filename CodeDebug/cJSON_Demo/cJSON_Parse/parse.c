@@ -332,7 +332,7 @@ void Parse_Oil_Price_Json(void)
     cJSON_Delete(root);
 }
 
-void Parse_File_Json(void)
+void Parse_File_Weather_Json(void)
 {
     printf("-----------------------------\n");
     printf("%s %s\n", __FUNCTION__, __FILE__);
@@ -342,11 +342,14 @@ void Parse_File_Json(void)
     int num = 0;
     char *filename = "weather.json";
 
-    root = cJSON_Parse(seniverse_forcast_json);
+    char * pStr = textFileRead(filename);
+    printf("read file data %s\n", pStr);
+
+    root = cJSON_Parse(pStr);
     if(root)
     {
         LOG("JSON格式正确\n");
-//        LOG("JSON数据:%s \n", cJSON_Print(root));
+
         /*results键*/
         root = cJSON_GetObjectItem(root, "results");
         root = cJSON_GetArrayItem(root, 0);
@@ -367,18 +370,19 @@ void Parse_File_Json(void)
         LOG("daily键信息: \n");
         daily = cJSON_GetObjectItem(root, "daily");
         //预报3天的天气
-        for(num = 0; num <= 2; num++)
+        int array_size = cJSON_GetArraySize(root);
+        for(num = 0; num <= array_size; num++)
         {
             day = cJSON_GetArrayItem(daily, num);   //当日天气，第0个元素
             str_tmp = cJSON_GetObjectItem(day, "date")->valuestring;    //白天天气
             LOG("date: %s\n", str_tmp);
-            str_tmp = cJSON_GetObjectItem(day, "text_day")->valuestring;    //白天天气
+            str_tmp = cJSON_GetObjectItem(day, "text_day")->valuestring; //白天天气
             LOG("text_day: %s\n", str_tmp);
             str_tmp = cJSON_GetObjectItem(day, "low")->valuestring;    //白天天气
             LOG("low: %s\n", str_tmp);
             str_tmp = cJSON_GetObjectItem(day, "high")->valuestring;    //白天天气
             LOG("high: %s\n", str_tmp);
-            str_tmp = cJSON_GetObjectItem(day, "wind_direction")->valuestring;    //白天天气
+            str_tmp = cJSON_GetObjectItem(day, "wind_direction")->valuestring; //白天天气
             LOG("wind_direction: %s\n", str_tmp);
             str_tmp = cJSON_GetObjectItem(day, "wind_scale")->valuestring;    //白天天气
             LOG("wind_scale: %s\n\n", str_tmp);
@@ -388,7 +392,144 @@ void Parse_File_Json(void)
     {
         LOG("Error before:\n[%s]\n",cJSON_GetErrorPtr());
     }
-//    cJSON_Delete(root);
+    cJSON_Delete(root);
+}
+
+void Lan_Info_JSON_Parse(cJSON * lan_port_info)
+{
+    printf("-----------------------------\n");
+    printf("%s %s\n", __FUNCTION__, __FILE__);
+    if(NULL == lan_port_info)
+    {
+        return;
+    }
+    cJSON *json_tmp;
+    char *str_tmp;
+    int array_size = cJSON_GetArraySize(lan_port_info);
+    LOG("lan_port size %d\n", array_size);
+    for(int num = 0; num < array_size; num++)
+    {
+        json_tmp = cJSON_GetArrayItem(lan_port_info, num);
+        str_tmp = cJSON_GetObjectItem(json_tmp, "Non_1905_neighbour_mac_address")->valuestring;
+        LOG("Non_1905_neighbour_mac_address %s\n", str_tmp);
+    }
+}
+
+void Station_Info_JSON_Parse(cJSON * station_info)
+{
+    printf("-----------------------------\n");
+    printf("%s %s\n", __FUNCTION__, __FILE__);
+    if(NULL == station_info)
+    {
+        return;
+    }
+    cJSON *json_tmp;
+    char *str_tmp;
+    int array_size = cJSON_GetArraySize(station_info);
+    LOG("station size %d\n", array_size);
+    for(int num = 0; num < array_size; num++)
+    {
+        json_tmp = cJSON_GetArrayItem(station_info, num);
+        str_tmp = cJSON_GetObjectItem(json_tmp, "station_mac")->valuestring;
+        LOG("station_mac %s\n", str_tmp);
+        str_tmp = cJSON_GetObjectItem(json_tmp, "station_rssi")->valuestring;
+        LOG("station_rssi %s\n", str_tmp);
+        str_tmp = cJSON_GetObjectItem(json_tmp, "station_connected_band")->valuestring;
+        LOG("station_connected_band %s\n", str_tmp);
+        str_tmp = cJSON_GetObjectItem(json_tmp, "station_downlink")->valuestring;
+        LOG("station_downlink %s\n", str_tmp);
+        str_tmp = cJSON_GetObjectItem(json_tmp, "station_uplink")->valuestring;
+        LOG("station_uplink %s\n", str_tmp);
+        str_tmp = cJSON_GetObjectItem(json_tmp, "bss_transition_support")->valuestring;
+        LOG("bss_transition_support %s\n", str_tmp);
+    }
+}
+
+void Child_Device_JSON_Parse(cJSON * child_devices)
+{
+    printf("-----------------------------\n");
+    printf("%s %s\n", __FUNCTION__, __FILE__);
+    if(NULL == child_devices)
+    {
+        return;
+    }
+    cJSON *json_tmp;
+    char *str_tmp;
+    int array_size = cJSON_GetArraySize(child_devices);
+    LOG("child_devices size %d\n", array_size);
+    for(int num = 0; num < array_size; num++)
+    {
+        json_tmp = cJSON_GetArrayItem(child_devices, num);
+        str_tmp = cJSON_GetObjectItem(json_tmp, "device_name")->valuestring;
+        LOG("device_name %s\n", str_tmp);
+        str_tmp = cJSON_GetObjectItem(json_tmp, "manufacturer")->valuestring;
+        LOG("manufacturer %s\n", str_tmp);
+        str_tmp = cJSON_GetObjectItem(json_tmp, "model_name")->valuestring;
+        LOG("model_name %s\n", str_tmp);
+        str_tmp = cJSON_GetObjectItem(json_tmp, "ip_addr")->valuestring;
+        LOG("ip_addr %s\n", str_tmp);
+        str_tmp = cJSON_GetObjectItem(json_tmp, "mac_address")->valuestring;
+        LOG("mac_address %s\n", str_tmp);
+        str_tmp = cJSON_GetObjectItem(json_tmp, "child_rssi")->valuestring;
+        LOG("child_rssi %s\n", str_tmp);
+        str_tmp = cJSON_GetObjectItem(json_tmp, "child_band")->valuestring;
+        LOG("child_band %s\n", str_tmp);
+
+        cJSON * json_tmp1 = cJSON_GetObjectItem(json_tmp, "lan_port_info");
+        Lan_Info_JSON_Parse(json_tmp1);
+
+        cJSON * json_tmp2 = cJSON_GetObjectItem(json_tmp, "station_info");
+        Station_Info_JSON_Parse(json_tmp2);
+
+        cJSON * json_tmp3 = cJSON_GetObjectItem(json_tmp, "child_devices");
+        Child_Device_JSON_Parse(json_tmp3);
+    }
+}
+
+void Parse_File_Topology_Json(void)
+{
+    printf("-----------------------------\n");
+    printf("%s %s\n", __FUNCTION__, __FILE__);
+    cJSON *root;
+    cJSON *lan_port_info, *station_info, *child_devices;
+    char *str_tmp;
+    int num = 0;
+    char *filename = "topology.json";
+    int array_size = 0;
+
+    char * pStr = textFileRead(filename);
+    printf("read file data %s\n", pStr);
+
+    root = cJSON_Parse(pStr);
+    if(root)
+    {
+        LOG("JSON格式正确\n");
+
+        //基本信息
+        str_tmp = cJSON_GetObjectItem(root, "device_name")->valuestring;
+        LOG("device_name %s\n", str_tmp);
+        str_tmp = cJSON_GetObjectItem(root, "ip_addr")->valuestring;
+        LOG("ip_addr %s\n", str_tmp);
+        str_tmp = cJSON_GetObjectItem(root, "mac_address")->valuestring;
+        LOG("mac_address %s\n", str_tmp);
+
+        //lan_port_info
+        lan_port_info = cJSON_GetObjectItem(root, "lan_port_info");
+        Lan_Info_JSON_Parse(lan_port_info);
+
+        //station_info
+        station_info = cJSON_GetObjectItem(root, "station_info");
+        Station_Info_JSON_Parse(station_info);
+        
+        //child_devices
+        child_devices = cJSON_GetObjectItem(root, "child_devices");
+        Child_Device_JSON_Parse(child_devices);
+    }
+    else
+    {
+        LOG("Error before:\n[%s]\n",cJSON_GetErrorPtr());
+    }
+    cJSON_Delete(root);
 }
 
 int get_file_line_number(char *filename)
@@ -415,28 +556,25 @@ int get_file_line_number(char *filename)
 //读取文件内容
 char* textFileRead(char* filename)
 {
-    FILE *fp=NULL;
+    FILE * fp=NULL;
     int flen=0;
-    char *p;
-    if ((fp=fopen(filename,"rb"))==NULL)
+    char * p;
+    if ((fp = fopen(filename, "rb")) == NULL)
     {
-//        printf("\nfile open error\n");
         return 0;
     }
-    fseek(fp,0L,SEEK_END);   //定位到文件末尾
-    flen=ftell(fp);          //得到文件大小
-    p=(char*)malloc(flen+1); //根据文件大小动态分配内存空间
-    if (p==NULL)
+    fseek(fp, 0L, SEEK_END);     //定位到文件末尾
+    flen = ftell(fp);            //得到文件大小
+    p  =(char*)malloc(flen + 1); //根据文件大小动态分配内存空间
+    if ( p == NULL)
     {
         fclose(fp);
         return 0;
     }
-    fseek(fp,0L,SEEK_SET);   //定义到文件头
-    fread(p,flen,1,fp);     //一次性读取全部文件内容
-    p[flen]='\0';              //字符串结束标志
-//    printf("%s\n",p);
+    fseek(fp, 0L, SEEK_SET);   //定义到文件头
+    fread(p, flen, 1, fp);     //一次性读取全部文件内容
+    p[flen] = '\0';            //字符串结束标志
     fclose(fp);
-//    free(p);
     return p;
 }
 
