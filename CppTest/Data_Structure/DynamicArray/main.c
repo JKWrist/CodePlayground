@@ -1,8 +1,9 @@
+//动态数组
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include "dynamicArray.h"
-
 
 struct Person
 {
