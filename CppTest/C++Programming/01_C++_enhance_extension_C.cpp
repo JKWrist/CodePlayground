@@ -21,12 +21,15 @@ int getRectS(int w,int h)
 
 void test01()
 {
+	printf("-----------%d----------\n", 1);
+
 	printf("%d\n", getRectS(10, 10));
 }
 
 //3、类型转换检测增强
 void test02()
 {
+	printf("-----------%d----------\n", 2);
 	//error: cannot initialize a variable of type 'char *' with an
     //  rvalue of type 'void *
 	char * p = (char *) malloc(64);
@@ -44,6 +47,7 @@ struct Person
 
 void test03()
 {
+	printf("-----------%d----------\n", 3);
 	Person p;
 	p.age = 17;
 	p.func();
@@ -56,6 +60,7 @@ bool flag = true; //bool 类型 代表 真和假       true ---> 真(1) false --
 //6、三目运算符增强
 void test04()
 {
+	printf("-----------%d----------\n", 4);
 	//?:
 	int a = 10;
 	int b = 20;
@@ -64,6 +69,32 @@ void test04()
 	(a < b ? a : b) = 100;  //C++下返回的是变量 b = 100
 	printf("%d\n", a);
 	printf("%d\n", b);
+}
+
+//7、const增强
+//全局const 与 C 语言中结论一致
+
+const int m_A = 100;
+void test05()
+{
+	printf("-----------%d----------\n", 5);
+	//m_A = 200;
+
+	// int * p = (int *)&m_A;
+	// *p = 200;    //这种方式也不能修改
+
+	//局部const
+	const int m_B = 100;
+	//m_B = 200;
+	int * p2 = (int *)&m_B;         //这里赋值的时候给了一个临时的变量
+	*p2 = 200;
+
+	cout << "m_B = " << m_B << endl;  //所以没有修改原有const变量
+	cout << "*p2 = " << *p2 << endl;
+	
+	//通过这个来开，目前 C++ 与 c 都可以使用一个常量来初始化一个数组
+	int arr1[m_A];
+	int arr2[m_B];
 }
 
 /****************************************************************
@@ -80,5 +111,7 @@ int main()
 	test02();
 	test03();
 	test04();
+	test05();
+	
 	return 0;
 }

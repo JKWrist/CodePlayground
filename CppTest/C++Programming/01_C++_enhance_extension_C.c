@@ -23,12 +23,14 @@ getRectS(w, h)
 
 void test01()
 {
+	printf("-----------%s----------\n", __FUNCTION__);
 	printf("%d\n", getRectS(10, 10, 10));  //too many arguments in call to 'getRectS
 }
 
 //3、类型转换检测增强
 void test02()
 {
+	printf("-----------%s----------\n", __FUNCTION__);
 	char * p = malloc(64);
 }
 
@@ -42,6 +44,7 @@ struct Person
 
 void test03()
 {
+	printf("-----------%s----------\n", __FUNCTION__);
 	struct Person p; //创建结构体变量时候，必须加关键字 struct
 	p.age = 100;
 }
@@ -52,16 +55,43 @@ void test03()
 //6、三目运算符增强
 void test04()
 {
+	printf("-----------%s----------\n", __FUNCTION__);
 	//?:
 
 	int a = 10;
 	int b = 20;
 
 	printf("ret = %d\n", a > b ? a : b);
-	*(a > b? &a: &b) = 100;
+	*(a > b? &a: &b) = 100;  //c里面返回的是值
 
 	printf("%d\n", a);
 	printf("%d\n", b);
+}
+
+//7、const 增强
+//全局const
+const int m_A = 100;   //在常量区，如果修改失败
+
+int test05()
+{
+	printf("-----------%s----------\n", __FUNCTION__);
+	// 通过变量修改
+	// m_A = 200;
+
+	// 通过指针修改
+	// int * p1 = &m_A;
+	// *p1 = 200;
+
+	//局部const
+	const int m_B = 100; //分配到栈上
+	//m_b = 200;
+	int *p2 = &m_B;
+	*p2 = 200;
+
+	printf("%d\n", m_B);
+
+	int arr1[m_A];
+	int arr2[m_B];
 }
 
 /****************************************************************
@@ -75,12 +105,10 @@ void test04()
 int main()
 {
 	test01();
-
 	test02();
-
 	test03();
-
 	test04();
-	
+	test05();
+
 	return 0;
 }
