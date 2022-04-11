@@ -15,13 +15,14 @@ public:
 		m_Age = age;
 	}
 
-	// Person(const Person &p)
-	// {
-	// 	m_Name = (char *)malloc(strlen(p.m_Name) + 1);
-	// 	memset(m_Name, 0, strlen(p.m_Name) + 1);
-	// 	strcpy(m_Name, p.m_Name);
-	// 	m_Age = p.m_Age;
-	// }
+	//在成员变量有需要分配空间的指针变量时，就需要重写拷贝构造函数
+	Person(const Person &p)
+	{
+		m_Name = (char *)malloc(strlen(p.m_Name) + 1);
+		memset(m_Name, 0, strlen(p.m_Name) + 1);
+		strcpy(m_Name, p.m_Name);
+		m_Age = p.m_Age;
+	}
 
 	~Person()
 	{
