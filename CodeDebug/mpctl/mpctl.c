@@ -55,15 +55,14 @@ cat gpio
 ******************************************************************/
 static int get_led_state()
 {
-    char path[64] = "./gpio";
     char line[12];
     FILE* fp = NULL;
     char* pstr = NULL;
 
-    fp = fopen(path, "r");
+    fp = fopen(SYS_CLASS_LEDS, "r");
     if (NULL == fp)
     {
-        MPCTL_DBG("open file(%s) fail,errno(%d)\n", path, errno);
+        MPCTL_DBG("open file(%s) fail,errno(%d)\n", SYS_CLASS_LEDS, errno);
         return 0;
     }
 
@@ -82,18 +81,20 @@ static int get_led_state()
 ******************************************************************/
 static void set_led_state(LED_STATE_T st)
 {
-    MPCTL_DBG("%s, st : %d\n",__FUNCTION__, st);
-    char path[64] = "./gpio";
-    FILE* fp = fopen(path, "w");
-    if (NULL == fp)
-    {
-        MPCTL_DBG("open file(%s) fail,errno(%d)\n", path, errno);
-        return;
-    }
-    fputc(st + 48, fp);  //ASCII数字从48开始，加enum 即可转换为数字
-    fclose(fp);
-}
+    // MPCTL_DBG("%s, st : %d\n",__FUNCTION__, st);
+    // FILE* fp = fopen(SYS_CLASS_LEDS, "w+");
+    // if (NULL == fp)
+    // {
+    //     MPCTL_DBG("open file(%s) fail,errno(%d)\n", SYS_CLASS_LEDS, errno);
+    //     return;
+    // }
+    // fputc(st + 48, fp);  //ASCII数字从48开始，加enum 即可转换为数字
+    // fclose(fp);
 
+    char cmd_str[128] = {0};
+    sprintf(cmd_str,"/bin/echo %d > %s", st, SYS_CLASS_LEDS);
+    system(cmd_str);
+}
 
 /****************************************************************
  *  函数名称：usage
@@ -157,7 +158,7 @@ int main(int argc, char *argv[])
                     break;
                 }
             }
-            
+
             if (0 == strcmp(argv[1], "green"))
             {
                 if (0 == strcmp(argv[2], "on"))
@@ -189,5 +190,5 @@ int main(int argc, char *argv[])
 
 arg_err_rtn:
     usage();
-    exit(1);
+    return -1;
 }
