@@ -1,4 +1,11 @@
+//#program once
+#ifndef __MY_ARRAY_H__
+#define __MY_ARRAY_H__
+
 #include <iostream>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 using namespace std;
 
 class MyArray
@@ -11,13 +18,13 @@ public:
 	MyArray(const MyArray & arr); //拷贝构造
 
 	//尾插法
-	void pushBack();
+	void pushBack(int val);
 
 	//根据位置设置数据
 	void setData(int pos, int val);
 
 	//根据位置获取数据
-	void getData(int pos);
+	int getData(int pos);
 
 	//获取数组容量
 	int getCapacity();
@@ -36,3 +43,5 @@ private:
 	int m_Size; //数组大小
 	int *pAddress; //真实在堆区开辟的数组
 };
+
+#endif
