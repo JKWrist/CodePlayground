@@ -27,6 +27,7 @@ ostream& operator>>(ostream & cin,  MyString &str)
 //有参构造函数
 MyString::MyString(char * str)
 {
+	cout << "有参构造函数" << endl;
 	m_String = new char[strlen(str) + 1];
 	strcpy(m_String, str);
 	m_Size = strlen(str);
@@ -35,6 +36,7 @@ MyString::MyString(char * str)
 //拷贝构造函数
 MyString::MyString(const MyString & str)
 {
+	cout << "拷贝构造函数" << endl;
 	m_String = new char [strlen(str.m_String)];
 	strcpy(m_String, str.m_String);
 	m_Size = strlen(str.m_String);
@@ -43,6 +45,7 @@ MyString::MyString(const MyString & str)
 //重载=运算符
 MyString & MyString::operator=(const char * str)
 {
+	cout << "重载=运算符" << endl;
 	if(m_String)
 	{
 		delete [] m_String;
@@ -58,6 +61,7 @@ MyString & MyString::operator=(const char * str)
 
 MyString & MyString::operator=(const MyString & str)
 {
+	cout << "重载=运算符" << endl;
 	if(m_String)
 	{
 		delete [] m_String;
@@ -70,32 +74,33 @@ MyString & MyString::operator=(const MyString & str)
 	return *this;
 }
 
-// //重载[]运算符
-// char & MyString::operator[](int index)
-// {
-// 	return m_String[index];
-// }
+//重载[]运算符
+char & MyString::operator[](int index)
+{
+	cout << "重载[]运算符" << endl;
+	return m_String[index];
+}
 
-// //重载+运算符
-// MyString & MyString::operator+(const char * str)
-// {
+//重载+运算符
+MyString & MyString::operator+(const char * str)
+{
 
-// }
-// MyString & MyString::operator+(const MyString & str)
-// {
+}
+MyString & MyString::operator+(const MyString & str)
+{
 
-// }
+}
 
-// //重载==运算符
-// bool MyString::operator==(const char * str)
-// {
+//重载==运算符
+bool MyString::operator==(const char * str)
+{
 
-// }
+}
 
-// bool MyString::operator==(const MyString &str)
-// {
+bool MyString::operator==(const MyString &str)
+{
 
-// }
+}
 
 MyString::~MyString()
 {
