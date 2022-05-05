@@ -1,5 +1,5 @@
-//虚指针
-//虚析构与纯虚析构
+//虚函数指针，验证对象中的虚指针
+//多态
 //虚析构与纯虚析构函数
 #include <iostream>
 #include <stdio.h>
@@ -135,13 +135,66 @@ public:
 	{
 		cout << "动物在说话" << endl;
 	}
-	//如果子类中有指向堆区的属性，那么要利用虚析构技术在
+	//如果子类中有指向堆区的属性，那么要利用虚析构技术在delete的时候，调用子类的析构函数
+	//virtual ~Animal()
+	// {
+	// 	cout << "Animal的析构函数调用" << endl;
+	// }
+
+	//纯虚析构 需要有声明 也需要有实现
+	virtual ~Animal() = 0;
 };
+
+Animal::~Animal()
+{
+// 	Undefined symbols for architecture x86_64:
+//   "Animal::~Animal()", referenced from:
+//       Cat::Cat(char*) in 07_virtual_and_pure_virtual_destructions-b8eadb.o
+//       Cat::~Cat() in 07_virtual_and_pure_virtual_destructions-b8eadb.o
+// ld: symbol(s) not found for architecture x86_64
+	cout << "Animal的纯析构函数调用" << endl;
+}
+
+class Cat : public Animal
+{
+public:
+	Cat(char * name)
+	{
+		cout << "Cat的构造函数调用" << endl;
+		this->m_Name = new char[strlen(name) + 1];
+		strcpy(this->m_Name, name);
+	}
+
+	virtual void speak()
+	{
+		cout << "小猫" << m_Name << "在说话" << endl;
+	}
+
+	~Cat()
+	{
+		if(m_Name)
+		{
+			cout << "Cat的析构函数调用" << endl;
+			delete[] m_Name;
+			m_Name = NULL;
+		}
+	}
+
+	char * m_Name;
+};
+
+void test03()
+{
+	Animal * animal = new Cat("Tom");
+	animal->speak();
+	delete animal;
+}
 
 int main()
 {
 	//test01();
-	test02();
+	//test02();
+	test03();
 
 	return 0;
 }
