@@ -1,76 +1,95 @@
-// // 用于定义一个单向链表数据结构体的头变量，该结构体只有一个指针成员slh_first，指向第一个type类型的数据结构；
-// #define	SLIST_HEAD(name, type)                          \
-// struct name {                                           \
-//     struct type *slh_first;	/* first element */         \
-// }
 
-// // 用于在定义时初始化SLIST_HEAD定义的数据结构体的头变量；
-// #define	SLIST_HEAD_INITIALIZER(head)                    \
-//     { NULL }
+/****************************************************************
+ *  函数名称：声明
+ *  创建日期：2022-06-08 08:47:56
+ *  作者：xujunze
+ *  输入参数：无
+ *  输出参数：无
+ *  返回值：无
+******************************************************************/
 
-// // 用于定义一个（用户）结构体的成员变量，该成员变量只包含一个指向type类型的指针sle_next；
-// #define	SLIST_ENTRY(type)                               \
-// struct {                                                \
-//     struct type *sle_next;  /* next element */          \
-// }
+// 用于定义一个单向链表数据结构的头指针，该结构体只有一个指针成员slh_first
+// 指向第一个type类型的数据结构；
+#define	SLIST_HEAD(name, type)                          \
+struct name {                                           \
+    struct type *slh_first;	/* first element */         \
+}
 
+// 用于在定义时初始化SLIST_HEAD定义的数据结构的头指针；
+#define	SLIST_HEAD_INITIALIZER(head)                    \
+    { NULL }
 
+// 用于定义一个（用户）结构体的成员变量，该成员变量只包含一个指向type类型的指针sle_next；
+#define	SLIST_ENTRY(type)                               \
+struct {                                                \
+    struct type *sle_next;  /* next element */          \
+}
 
-// // 用于判断单向链表是否为空：空则返回true，否则返回false；
-// #define SLIST_EMPTY(head)   ((head)->slh_first == NULL)
+/****************************************************************
+ *  函数名称：函数
+ *  创建日期：2022-06-08 08:48:15
+ *  作者：xujunze
+ *  输入参数：无
+ *  输出参数：无
+ *  返回值：无
+******************************************************************/
 
-// // 用于获取单向链表的第一个元素；
-// #define SLIST_FIRST(head)   ((head)->slh_first)
+// 用于判断单向链表是否为空：空则返回true，否则返回false；
+#define SLIST_EMPTY(head)   ((head)->slh_first == NULL)
 
-// // 用于遍历单向链表，var是临时变量，head是链表头指针（SLIST_HEAD定义的变量），field是SLIST_ENTRY定义的成员变量名；
-// #define SLIST_FOREACH(var, head, field)                 \
-//     for ((var) = SLIST_FIRST((head));                   \
-//         (var);                                          \
-//         (var) = SLIST_NEXT((var), field))
+// 用于获取单向链表的第一个元素；
+#define SLIST_FIRST(head)   ((head)->slh_first)
 
-// // 用于初始化SLIST_HEAD定义的头指针变量；
-// #define SLIST_INIT(head) do {                           \
-//         SLIST_FIRST((head)) = NULL;                     \
-// } while (0)
+// 用于获取elm元素的下一个元素，field是前面用SLIST_ENTRY定义的成员变量名；
+#define SLIST_NEXT(elm, field)	((elm)->field.sle_next)
 
-// // 用于将元素elm插入到当前链表元素slistelm的后面；
-// #define SLIST_INSERT_AFTER(slistelm, elm, field) do {           \
-//     SLIST_NEXT((elm), field) = SLIST_NEXT((slistelm), field);   \
-//     SLIST_NEXT((slistelm), field) = (elm);                      \
-// } while (0)
+// 用于初始化SLIST_HEAD定义的头指针变量；
+#define SLIST_INIT(head) do {                           \
+        SLIST_FIRST((head)) = NULL;                     \
+} while (0)
 
-// // 用于将元素elm插入到当前链表head的头部；head是SLIST_HEAD定义的链表头指针；
-// #define SLIST_INSERT_HEAD(head, elm, field) do {            \
-//     SLIST_NEXT((elm), field) = SLIST_FIRST((head));         \
-//     SLIST_FIRST((head)) = (elm);                            \
-// } while (0)
+// 用于遍历单向链表，var是临时变量，head是链表头指针（SLIST_HEAD定义的变量），
+// field是SLIST_ENTRY定义的成员变量名；
+#define SLIST_FOREACH(var, head, field)                 \
+    for ((var) = SLIST_FIRST((head));                   \
+        (var);                                          \
+        (var) = SLIST_NEXT((var), field))
 
-// // 用于获取elm元素的下一个元素，field是前面用SLIST_ENTRY定义的成员变量名；
-// #define SLIST_NEXT(elm, field)	((elm)->field.sle_next)
+// 用于将元素elm插入到当前链表元素slistelm的后面；
+#define SLIST_INSERT_AFTER(slistelm, elm, field) do {           \
+    SLIST_NEXT((elm), field) = SLIST_NEXT((slistelm), field);   \
+    SLIST_NEXT((slistelm), field) = (elm);                      \
+} while (0)
 
-// // 用于从head链表中删除elm元素；注意首先判断elm元素是否在head链表中，否则会崩溃；
-// #define SLIST_REMOVE(head, elm, type, field) do {           \
-//     if (SLIST_FIRST((head)) == (elm)) {                     \
-//         SLIST_REMOVE_HEAD((head), field);                   \
-//     }                                                       \
-//     else {                                                  \
-//         struct type *curelm = SLIST_FIRST((head));          \
-//         while (SLIST_NEXT(curelm, field) != (elm))          \
-//             curelm = SLIST_NEXT(curelm, field);             \
-//         SLIST_NEXT(curelm, field) =                         \
-//             SLIST_NEXT(SLIST_NEXT(curelm, field), field);   \
-//     }                                                       \
-// } while (0)
+// 用于将元素elm插入到当前链表head的头部；head是SLIST_HEAD定义的链表头指针；
+#define SLIST_INSERT_HEAD(head, elm, field) do {            \
+    SLIST_NEXT((elm), field) = SLIST_FIRST((head));         \
+    SLIST_FIRST((head)) = (elm);                            \
+} while (0)
 
-// // 用于删除第一个元素；注意删除时判断head是否为空，否则会崩溃;
-// #define SLIST_REMOVE_HEAD(head, field) do {                         \
-//     SLIST_FIRST((head)) = SLIST_NEXT(SLIST_FIRST((head)), field);   \
-// } while (0)
+// 用于从head链表中删除elm元素；注意首先判断elm元素是否在head链表中，否则会崩溃；
+#define SLIST_REMOVE(head, elm, type, field) do {           \
+    if (SLIST_FIRST((head)) == (elm)) {                     \
+        SLIST_REMOVE_HEAD((head), field);                   \
+    }                                                       \
+    else {                                                  \
+        struct type *curelm = SLIST_FIRST((head));          \
+        while (SLIST_NEXT(curelm, field) != (elm))          \
+            curelm = SLIST_NEXT(curelm, field);             \
+        SLIST_NEXT(curelm, field) =                         \
+            SLIST_NEXT(SLIST_NEXT(curelm, field), field);   \
+    }                                                       \
+} while (0)
+
+// 用于删除第一个元素；注意删除时判断head是否为空，否则会崩溃;
+#define SLIST_REMOVE_HEAD(head, field) do {                         \
+    SLIST_FIRST((head)) = SLIST_NEXT(SLIST_FIRST((head)), field);   \
+} while (0)
 
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/queue.h>
+//#include <sys/queue.h>
 
 struct SLIST_ITEM {
 	int value;
@@ -91,7 +110,8 @@ int main(int argc, char *argv[])
 		printf("single list is empty\n");
     }
 
-	for( i = 0; i < 10; i ++) {
+	for( i = 0; i < 10; i ++)
+	{
 		item = (struct SLIST_ITEM *)malloc(sizeof(struct SLIST_ITEM));
 		item->value = i;
         // 头部插入：即9,8,7,6,5,4,3,2,1,0

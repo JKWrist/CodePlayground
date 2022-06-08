@@ -30,7 +30,7 @@ void test()
 
 	//读文件
 	FILE* fp_read = NULL;
-	fp_read = fopen("./mydata.txt", "rb");
+	fp_read = fopen("./mydata.txt", "r");
 	if(fp_read == NULL)
 	{
 		perror("fopen:");
