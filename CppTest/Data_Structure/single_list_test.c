@@ -45,7 +45,6 @@ struct {                      \
 }slist_head;
 */
 
-
 /****************************************************************
  *  函数名称：main
  *  创建日期：2022-06-08 09:26:28
@@ -58,7 +57,6 @@ int main()
 {
 	SLIST_INIT(&slist_head);
 	printf("%d\n", sizeof(slist_head));
-
 
 	struct SLIST_ITEM item;
 	printf("%d\n", sizeof(item));
