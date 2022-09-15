@@ -299,7 +299,7 @@ class Test():
             print("测试次数：", i)
             web.dut_logout()
 
-    def test_internet(self):
+    def change_mode(self):
         for i in range(5000):
             # 页面修改wifi配置，串口打开telnet,检查dhcpc进程
             # 页面重启设备，串口打开telnet，串口检查dhcpc进程
@@ -315,15 +315,11 @@ class Test():
             telent = TelnetClient()
             telent.login_host("cmcc.wifi", "admin", "system")
             res = telent.check_internet()
-            if res == False:
-                print("======没有网络，已复现问题======")
-                break
-            else:
-                print("设备有网络，未复现问题")
+            time.sleep(3)
             web.dut_logout()
             web.dut_driverout()
             print("测试次数：", i)
 
 if __name__ == '__main__':
     test = Test()
-    test.test_internet()
+    test.change_mode()
