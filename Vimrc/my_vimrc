@@ -109,7 +109,7 @@ set nocompatible
 set cursorline
 
 " Enable mouse usage (all modes) "
-set mouse=a
+" set mouse=a
 
 ""
 set selection=exclusive
