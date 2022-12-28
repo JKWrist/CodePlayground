@@ -1,9 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/home/xujunze/97ax_ori/rtk_97ax/users/adapter-api/rtk_api_isp'
-let g:netrw_dirhist_2='/home/xujunze/97ax_ori/rtk_97ax/users/adapter-api'
-let g:netrw_dirhist_3='/home/xujunze/97ax_ori/rtk_97ax/users'
-let g:netrw_dirhist_4='/home/xujunze/AX1500_CUCC/rtk_usdk120/user'
-let g:netrw_dirhist_5='/home/xujunze/AX1800_B130/rtk_usdk120/vendors/Realtek/luna_ap_mips'
-let g:netrw_dirhist_6='/home/xujunze/AX1800_B130/rtk_usdk120/vendors/Realtek/luna_ap_mips/conf44'
-let g:netrw_dirhist_7='/home/xujunze/AX1800_B130/rtk_usdk120/vendors/Realtek/luna_ap_mips/conf44/V074G_98D_8832A_8192XA'
