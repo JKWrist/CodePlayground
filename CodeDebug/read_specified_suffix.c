@@ -8,7 +8,7 @@
 #include <errno.h>
 
 //搜索 指定目录下的所有文件及其子目录下的文件
-void getFileName(char *dirPath)
+void get_file_name(char *dirPath)
 {
 	DIR *dir = opendir(dirPath);
 	if (dir == NULL)
@@ -34,7 +34,7 @@ void getFileName(char *dirPath)
 
 		if (S_ISDIR(st.st_mode)) //如果是子目录，继续递归搜索
 		{
-			getFileName(ent->d_name);
+			get_file_name(ent->d_name);
 		}
 		else
 		{
@@ -48,6 +48,6 @@ void getFileName(char *dirPath)
 
 int main(int argc, char *argv[])
 {
-	getFileName("..");
+	get_file_name("..");
 	return 0;
 }
