@@ -1,1 +1,0 @@
-const int g_a = 1000;

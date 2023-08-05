@@ -1,3 +1,0 @@
-#函数 防止函数运行报错
-all:
-	gcc 05_func.c 05_main.c

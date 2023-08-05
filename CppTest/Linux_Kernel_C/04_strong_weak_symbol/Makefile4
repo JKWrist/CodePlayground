@@ -1,3 +1,0 @@
-#函数 强符号 弱符号
-all:
-	gcc 04_main.c 04_func.c

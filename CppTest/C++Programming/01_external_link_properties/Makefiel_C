@@ -1,5 +1,0 @@
-all:
-	gcc external_link.c test.c
-
-clean:
-	rm *.o

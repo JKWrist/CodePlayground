@@ -1,5 +1,0 @@
-xiaowen 98 man 24
-xiaoliu 87 man 25
-xiaohu 84 man 32
-xiaozhi 101 woman 21
-xiaohu 84 man 32

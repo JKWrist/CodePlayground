@@ -1,3 +1,0 @@
-ProductA 30
-ProductB 76
-ProductC 55

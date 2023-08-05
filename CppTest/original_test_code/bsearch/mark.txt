@@ -1,7 +1,0 @@
-Len    77 68 45
-Jerry  99 89 88
-Harry  78 66 67
-Lucy   87 78 87
-Mickey 88 77 66
-Peter  59 68 78
-Alice  62 73 88

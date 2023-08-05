@@ -1,5 +1,0 @@
-all:
-	g++ external_link.cpp test.cpp
-
-clean:
-	rm *.o

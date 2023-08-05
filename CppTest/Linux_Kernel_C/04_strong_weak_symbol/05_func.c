@@ -1,1 +1,0 @@
-int a __attribute__ ((weak)) = 1;
