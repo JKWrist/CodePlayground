@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     struct sockaddr_in serv;
     serv.sin_family = AF_INET;
     serv.sin_port = htons(8888);
-    inet_pton(AF_INET, "127.0.0.1", &serv.sin_addr.s_addr);
+    inet_pton(AF_INET, "47.93.246.97", &serv.sin_addr.s_addr);
     printf("[%x]\n", serv.sin_addr.s_addr);
     
     int ret = connect(cfd, (struct sockaddr *)&serv, sizeof(serv));
