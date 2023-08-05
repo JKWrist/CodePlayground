@@ -1,9 +1,0 @@
-.PHONY:all
-
-CUCC_APP_SCOURCE = cucc_app.c cucc_api.c
-
-#$(error $(CUCC_APP_SCOURCE))
-#$(warning $(CUCC_APP_SCOURCE))
-all:
-	echo $(CUCC_APP_SCOURCE)
-	echo ${CUCC_APP_SCOURCE}
