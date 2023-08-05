@@ -1,0 +1,13 @@
+# 可以使用别的文件名来写Makefile make时增加-f 或者 --file参数 
+# make -f Makefile.Linux
+# ./main 5 2 to run the program
+# make -f Makefile.Linux clean
+
+main:main.cc MathFunctions.o
+	gcc main.cc MathFunctions.o -o main
+MathFunctions.o:MathFunctions.h
+
+.PHONY:clean
+clean:
+	-rm MathFunctions.o main 	
+

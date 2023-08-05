@@ -1,0 +1,29 @@
+#!/bin/bash
+
+echo "before shift"
+echo '$0' $0
+echo '$1' $1
+echo '$2' $2
+echo '$3' $3
+echo '$4' $4
+echo '$5' $5
+echo '$6' $6
+echo '$7' $7
+echo '$#' $# #除了脚本的参数个数
+echo '$@' $@ #所有参数
+echo '$*' $* #所有参数
+echo '$$' $$ #当前进程号
+
+shift
+echo '$0' $0
+echo '$1' $1
+echo '$2' $2
+echo '$3' $3
+echo '$4' $4
+echo '$5' $5
+echo '$6' $6
+echo '$7' $7
+echo '$#' $# #除了脚本的参数个数
+echo '$@' $@ #所有参数
+echo '$*' $* #所有参数
+echo '$$' $$ #当前进程号

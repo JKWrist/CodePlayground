@@ -1,0 +1,16 @@
+create edu_tport bitmap:port range 1000-10000
+add edu_tport 1719
+add edu_tport 1720
+add edu_tport 5061
+add edu_tport 5062
+add edu_tport 5063
+add edu_tport 5064
+add edu_tport 5065
+add edu_tport 5066
+add edu_tport 5067
+add edu_tport 5068
+add edu_tport 5069
+add edu_tport 5070
+add edu_tport 5091
+add edu_tport 8801
+add edu_tport 8802

@@ -1,0 +1,18 @@
+[pkginfo]
+pkgname=cmhy-JKYX_2.3.0_2.2.tar.gz
+version=2.3.0
+timestamp=1681298318
+install=yes
+upgrade=no
+
+[upgradeinfo]
+uppkgname=
+upversion=
+
+[pkgcnt]
+pkgsum=1
+
+[plugin1]
+runpath1=/tmp/bvas
+exename1=bvasPlugin
+runcmd1=/tmp/bvas/bvasPlugin_monitor.sh &
