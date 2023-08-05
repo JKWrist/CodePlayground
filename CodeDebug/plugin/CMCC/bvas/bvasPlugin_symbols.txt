@@ -1,0 +1,71 @@
+
+Symbol table '.dynsym' contains 68 entries:
+   Num:    Value  Size Type    Bind   Vis      Ndx Name
+     0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 00413328     4 OBJECT  GLOBAL DEFAULT   28 fp_debug_bvas
+     2: 00413330    24 OBJECT  GLOBAL DEFAULT   28 userOrderStatus
+     3: 00000000     0 FUNC    GLOBAL DEFAULT  UND sigaction@GLIBC_2.0 (2)
+     4: 00000000     0 FUNC    GLOBAL DEFAULT  UND exitProcess_netmonitor
+     5: 00000000     0 FUNC    GLOBAL DEFAULT  UND sec_get_router_info
+     6: 0040277c     4 OBJECT  GLOBAL DEFAULT   17 _IO_stdin_used
+     7: 00000000     0 FUNC    GLOBAL DEFAULT  UND sleep@GLIBC_2.0 (3)
+     8: 00000000     0 FUNC    GLOBAL DEFAULT  UND accctrl_main
+     9: 00000000     0 FUNC    GLOBAL DEFAULT  UND gameacc_cmcc_end
+    10: 00000000     0 FUNC    GLOBAL DEFAULT  UND usleep@GLIBC_2.0 (3)
+    11: 00000000     0 FUNC    GLOBAL DEFAULT  UND abortedProcess_netmonitor
+    12: 00000000     0 FUNC    GLOBAL DEFAULT  UND fflush@GLIBC_2.0 (3)
+    13: 00000000     0 FUNC    GLOBAL DEFAULT  UND sigemptyset@GLIBC_2.0 (3)
+    14: 00413310    24 OBJECT  GLOBAL DEFAULT   28 lock_debug2file
+    15: 00000000     0 FUNC    GLOBAL DEFAULT  UND gameacc_cmcc_crash_handle
+    16: 00000000     0 FUNC    GLOBAL DEFAULT  UND pthread_detach@GLIBC_2.0 (2)
+    17: 00403040     0 FUNC    GLOBAL DEFAULT [MIPS PLT]   UND __libc_start_main@GLIBC_2.0 (3)
+    18: 00000000     0 FUNC    GLOBAL DEFAULT  UND signal@GLIBC_2.0 (3)
+    19: 00413210     0 OBJECT  GLOBAL DEFAULT   25 __RLD_MAP
+    20: 00000000     0 FUNC    GLOBAL DEFAULT  UND gameacc_cmcc_atexit
+    21: 00000001     0 SECTION GLOBAL DEFAULT  ABS _DYNAMIC_LINKING
+    22: 00000000     0 FUNC    GLOBAL DEFAULT  UND pthread_netmonitor
+    23: 00000000     0 FUNC    GLOBAL DEFAULT  UND pthread_create@GLIBC_2.2 (5)
+    24: 00000000     0 FUNC    GLOBAL DEFAULT  UND edu_acc_init
+    25: 00000000     0 FUNC    GLOBAL DEFAULT  UND curl_global_init
+    26: 00000000     0 FUNC    GLOBAL DEFAULT  UND gameacc_cmcc_start
+    27: 00000000     0 FUNC    GLOBAL DEFAULT  UND accctrl_stop
+    28: 00000000     0 FUNC    GLOBAL DEFAULT  UND edu_acc_exit
+    29: 00000000     0 FUNC    GLOBAL DEFAULT  UND memset@GLIBC_2.0 (3)
+    30: 00000000     0 FUNC    GLOBAL DEFAULT  UND curl_global_cleanup
+    31: 00000000     0 FUNC    GLOBAL DEFAULT  UND abort@GLIBC_2.0 (3)
+    32: 00000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterTMCloneTab
+    33: 00000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneTable
+    34: 00402720     0 FUNC    GLOBAL DEFAULT  UND ftell@GLIBC_2.0 (3)
+    35: 00402710     0 FUNC    GLOBAL DEFAULT  UND localtime@GLIBC_2.0 (3)
+    36: 00402700     0 FUNC    GLOBAL DEFAULT  UND strcpy@GLIBC_2.0 (3)
+    37: 00000000     0 FUNC    WEAK   DEFAULT  UND __gmon_start__
+    38: 00000000     0 OBJECT  GLOBAL DEFAULT  UND stderr@GLIBC_2.0 (3)
+    39: 004026f0     0 FUNC    GLOBAL DEFAULT  UND sigaddset@GLIBC_2.0 (3)
+    40: 004026e0     0 FUNC    GLOBAL DEFAULT  UND vfprintf@GLIBC_2.0 (3)
+    41: 004026d0     0 FUNC    GLOBAL DEFAULT  UND closelog@GLIBC_2.0 (3)
+    42: 004026c0     0 FUNC    GLOBAL DEFAULT  UND strftime@GLIBC_2.0 (3)
+    43: 004026b0     0 FUNC    GLOBAL DEFAULT  UND vsyslog@GLIBC_2.0 (3)
+    44: 004026a0     0 FUNC    GLOBAL DEFAULT  UND printf@GLIBC_2.0 (3)
+    45: 00402690     0 FUNC    GLOBAL DEFAULT  UND closedir@GLIBC_2.0 (3)
+    46: 00402680     0 FUNC    GLOBAL DEFAULT  UND opendir@GLIBC_2.0 (3)
+    47: 00402670     0 FUNC    GLOBAL DEFAULT  UND ctime_r@GLIBC_2.0 (3)
+    48: 00402660     0 FUNC    GLOBAL DEFAULT  UND strncmp@GLIBC_2.0 (3)
+    49: 00402650     0 FUNC    GLOBAL DEFAULT  UND pthread_mutex_lock@GLIBC_2.0 (2)
+    50: 00402640     0 FUNC    GLOBAL DEFAULT  UND pthread_mutex_unlock@GLIBC_2.0 (2)
+    51: 00402630     0 FUNC    GLOBAL DEFAULT  UND sigprocmask@GLIBC_2.0 (3)
+    52: 00402620     0 FUNC    GLOBAL DEFAULT  UND fseek@GLIBC_2.0 (3)
+    53: 00402610     0 FUNC    GLOBAL DEFAULT  UND openlog@GLIBC_2.0 (3)
+    54: 00402600     0 FUNC    GLOBAL DEFAULT  UND fclose@GLIBC_2.2 (4)
+    55: 004025f0     0 FUNC    GLOBAL DEFAULT  UND time@GLIBC_2.0 (3)
+    56: 004025e0     0 FUNC    GLOBAL DEFAULT  UND strcmp@GLIBC_2.0 (3)
+    57: 004025d0     0 FUNC    GLOBAL DEFAULT  UND __cxa_atexit@GLIBC_2.2 (4)
+    58: 004025c0     0 FUNC    GLOBAL DEFAULT  UND sprintf@GLIBC_2.0 (3)
+    59: 004025b0     0 FUNC    GLOBAL DEFAULT  UND readdir@GLIBC_2.0 (3)
+    60: 004025a0     0 FUNC    GLOBAL DEFAULT  UND fprintf@GLIBC_2.0 (3)
+    61: 00402590     0 FUNC    GLOBAL DEFAULT  UND strlen@GLIBC_2.0 (3)
+    62: 00402580     0 FUNC    GLOBAL DEFAULT  UND fwrite@GLIBC_2.0 (3)
+    63: 00402570     0 FUNC    GLOBAL DEFAULT  UND fgets@GLIBC_2.0 (3)
+    64: 00402560     0 FUNC    GLOBAL DEFAULT  UND fputc@GLIBC_2.0 (3)
+    65: 00402550     0 FUNC    GLOBAL DEFAULT  UND getpid@GLIBC_2.0 (3)
+    66: 00402540     0 FUNC    GLOBAL DEFAULT  UND fopen@GLIBC_2.2 (4)
+    67: 00402530     0 FUNC    GLOBAL DEFAULT  UND strstr@GLIBC_2.0 (3)
